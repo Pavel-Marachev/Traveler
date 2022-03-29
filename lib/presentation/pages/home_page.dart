@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:traveler/presentation/widgets/tile_with_number_of_travel.dart';
 
-
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 

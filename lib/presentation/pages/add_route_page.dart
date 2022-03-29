@@ -7,13 +7,15 @@ class AddRoutePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(padding: const EdgeInsets.symmetric(horizontal: 20),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         constraints: const BoxConstraints.expand(),
         decoration: BoxDecoration(
           color: kBackgroundWidgetColor.withOpacity(0.9),
           borderRadius:
-          const BorderRadius.vertical(bottom: Radius.circular(50)),
-        ),),
+              const BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+      ),
       //bottomNavigationBar: const MyTabBar(),
     );
   }
