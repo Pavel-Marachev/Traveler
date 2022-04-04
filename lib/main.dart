@@ -8,7 +8,7 @@ import 'package:traveler/presentation/pages/places_list_page.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 
-void main() {
+void main() async {
   runApp(BlocProvider(
       create: (context) => NavigationBloc()..add(AppStarted()),
       child: const MyApp()));
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
             ),
             child: BottomNavigationBar(
-              unselectedItemColor: kWidgetColor,
+              unselectedItemColor: kWidgetColor.withOpacity(0.6),
               selectedItemColor: kWidgetColor,
               backgroundColor: Colors.transparent,
               currentIndex: getCurrentIndex(state),
@@ -79,18 +79,24 @@ class MyApp extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     "assets/images/list_icon.svg",
+                    color: kWidgetColor
+                        .withOpacity(getCurrentIndex(state) == 0 ? 1 : 0.6),
                   ),
                   label: "Маршруты",
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     "assets/images/home_icon.svg",
+                    color: kWidgetColor
+                        .withOpacity(getCurrentIndex(state) == 1 ? 1 : 0.6),
                   ),
                   label: "Главная",
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     "assets/images/travel_add_icon.svg",
+                    color: kWidgetColor
+                        .withOpacity(getCurrentIndex(state) == 2 ? 1 : 0.6),
                   ),
                   label: "Планирование",
                 ),

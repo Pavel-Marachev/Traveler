@@ -40,6 +40,7 @@ dev_dependencies:
     sdk: flutter
   flutter_svg: ^1.0.3
   flutter_bloc: ^8.0.1
+  yandex_mapkit: ^2.0.3
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

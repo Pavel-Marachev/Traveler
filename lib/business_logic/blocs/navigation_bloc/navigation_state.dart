@@ -3,8 +3,6 @@ part of 'package:traveler/business_logic/blocs/navigation_bloc/navigation_bloc.d
 @immutable
 abstract class NavigationState {}
 
-class NavigationInitial extends NavigationState {}
-
 class StateHomePage extends NavigationState {}
 
 class StatePlacesListPage extends NavigationState {}
