@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:traveler/data/models/geographic_objects_model.dart';
+import 'package:traveler/data/repositories/repository.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -10,14 +12,16 @@ class AddRoutePage extends StatefulWidget {
 }
 
 class _AddRoutePageState extends State<AddRoutePage> {
-  // void autoCompleteSearch(String value) async {
-  //   var result = await googlePlace.autocomplete.get(value);
-  //   if (result != null && result.predictions != null && mounted) {
-  //     setState(() {
-  //       predictions = result.predictions;
-  //     });
-  //   }
-  // }
+  late YandexMapController controller;
+  Point? _point;
+  final animation =
+      const MapAnimation(type: MapAnimationType.smooth, duration: 2.0);
+
+  final _repository = Repository();
+  fetchAllObjects() async {
+    GeographicObjectsModel itemModel = await _repository.fetchObjectsList();
+    print(itemModel.properties);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,51 +33,56 @@ class _AddRoutePageState extends State<AddRoutePage> {
         ),
         backgroundColor: kBackgroundWidgetColor.withOpacity(0.9),
       ),
-      body: Container(
-        margin: EdgeInsets.only(right: 20, left: 20, top: 20),
-        child: Column(
-          children: [
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Выберете город',
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.blue,
-                    width: 2,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black54,
-                    width: 2,
-                  ),
-                ),
-              ),
-              onChanged: (value) {
-                if (value.isNotEmpty) {}
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: 0,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: const CircleAvatar(
-                      child: Icon(
-                        Icons.pin_drop,
-                        color: Colors.white,
-                      ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
+          child: Column(
+            children: [
+              TextField(
+                decoration: const InputDecoration(
+                  labelText: 'Выберете город',
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                      width: 2,
                     ),
-                    title: Text(''),
-                    onTap: () {},
-                  );
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black54,
+                      width: 2,
+                    ),
+                  ),
+                ),
+                onChanged: (value) {
+                  fetchAllObjects();
+                  _point = Point(latitude: 52.9650800, longitude: 36.0784900);
+                },
+                onSubmitted: (value) async {
+                  if (_point != null) {
+                    FocusScope.of(context).unfocus();
+                    await controller.moveCamera(
+                        CameraUpdate.newCameraPosition(
+                            CameraPosition(target: _point!)),
+                        animation: animation);
+                  }
                 },
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
+                child: YandexMap(
+                  nightModeEnabled: false,
+                  rotateGesturesEnabled: false,
+                  onMapCreated: (YandexMapController yandexMapController) {
+                    controller = yandexMapController;
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:traveler/presentation/theme/constants.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PlacesListPage extends StatefulWidget {
   const PlacesListPage({Key? key}) : super(key: key);
@@ -14,7 +13,7 @@ class _PlacesListPageState extends State<PlacesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Карта'),
+        title: Text('Маршруты'),
         backgroundColor: kBackgroundWidgetColor.withOpacity(0.9),
       ),
       body: Container(
@@ -22,7 +21,6 @@ class _PlacesListPageState extends State<PlacesListPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
         ),
-        child: YandexMap(),
       ),
     );
   }
