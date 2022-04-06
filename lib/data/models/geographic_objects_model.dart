@@ -1,7 +1,3 @@
-/// type : "FeatureCollection"
-/// properties : {"ResponseMetaData":{"SearchResponse":{"found":10,"display":"single","boundedBy":[[31.998377,54.696756],[32.031372,54.714152]]},"SearchRequest":{"request":"Рай,Россия","skip":0,"results":10,"boundedBy":[[37.048427,55.43644866],[38.175903,56.04690174]]}}}
-/// features : [{"type":"Feature","geometry":{"type":"Point","coordinates":[32.016406,54.705044]},"properties":{"name":"деревня Рай","description":"Смоленский район, Россия","boundedBy":[[31.998377,54.696756],[32.031372,54.714152]],"GeocoderMetaData":{"precision":"other","text":"Россия, Смоленский район, деревня Рай","kind":"locality"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[31.819953,68.574668]},"properties":{"name":"река Рай","description":"городское поселение Верхнетуломский, Кольский район, Мурманская область, Россия","boundedBy":[[31.807584,68.557967],[31.837947,68.597722]],"GeocoderMetaData":{"precision":"other","text":"Россия, Мурманская область, Кольский район, городское поселение Верхнетуломский, река Рай","kind":"hydro"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[143.518227,60.762699]},"properties":{"name":"река Рай","description":"Охотский район, Хабаровский край, Россия","boundedBy":[[143.488188,60.73072],[143.547189,60.776187]],"GeocoderMetaData":{"precision":"other","text":"Россия, Хабаровский край, Охотский район, река Рай","kind":"hydro"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[50.002286,61.053777]},"properties":{"name":"деревня Рай","description":"муниципальное образование Визинга, муниципальный район Сысольский, Республика Коми, Россия","boundedBy":[[49.986044,61.051138],[50.015365,61.058197]],"GeocoderMetaData":{"precision":"other","text":"Россия, Республика Коми, муниципальный район Сысольский, муниципальное образование Визинга, деревня Рай","kind":"locality"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[65.323098,66.901625]},"properties":{"name":"горный массив Рай-Из","description":"Россия","boundedBy":[[64.973941,66.782237],[65.740904,67.000011]],"GeocoderMetaData":{"precision":"other","text":"Россия, горный массив Рай-Из","kind":"other"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[143.623079,60.246188]},"properties":{"name":"река Рай","description":"Охотский район, Хабаровский край, Россия","boundedBy":[[143.614473,60.241231],[143.632269,60.249484]],"GeocoderMetaData":{"precision":"other","text":"Россия, Хабаровский край, Охотский район, река Рай","kind":"hydro"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[46.793135,59.034302]},"properties":{"name":"деревня Рай","description":"Вохомский район, Костромская область, Россия","boundedBy":[[46.787332,59.032079],[46.798885,59.041529]],"GeocoderMetaData":{"precision":"other","text":"Россия, Костромская область, Вохомский район, деревня Рай","kind":"locality"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[36.90758,62.052959]},"properties":{"name":"озеро Рай","description":"Кубовское сельское поселение, Пудожский район, Республика Карелия, Россия","boundedBy":[[36.900798,62.050311],[36.914668,62.055425]],"GeocoderMetaData":{"precision":"other","text":"Россия, Республика Карелия, Пудожский район, Кубовское сельское поселение, озеро Рай","kind":"hydro"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[36.293078,57.573919]},"properties":{"name":"деревня Раи","description":"Бежецкий район, Тверская область, Россия","boundedBy":[[36.288254,57.571043],[36.297579,57.576221]],"GeocoderMetaData":{"precision":"other","text":"Россия, Тверская область, Бежецкий район, деревня Раи","kind":"locality"}}},{"type":"Feature","geometry":{"type":"Point","coordinates":[37.860998,50.386509]},"properties":{"name":"поселок Рай","description":"Волоконовский район, Белгородская область, Россия","boundedBy":[[37.858815,50.384728],[37.863783,50.388117]],"GeocoderMetaData":{"precision":"other","text":"Россия, Белгородская область, Волоконовский район, поселок Рай","kind":"locality"}}}]
-
 class GeographicObjectsModel {
   GeographicObjectsModel({
     String? type,
@@ -55,10 +51,6 @@ class GeographicObjectsModel {
   }
 }
 
-/// type : "Feature"
-/// geometry : {"type":"Point","coordinates":[32.016406,54.705044]}
-/// properties : {"name":"деревня Рай","description":"Смоленский район, Россия","boundedBy":[[31.998377,54.696756],[32.031372,54.714152]],"GeocoderMetaData":{"precision":"other","text":"Россия, Смоленский район, деревня Рай","kind":"locality"}}
-
 class Features {
   Features({
     String? type,
@@ -108,37 +100,29 @@ class Features {
   }
 }
 
-/// name : "деревня Рай"
-/// description : "Смоленский район, Россия"
-/// boundedBy : [[31.998377,54.696756],[32.031372,54.714152]]
-/// GeocoderMetaData : {"precision":"other","text":"Россия, Смоленский район, деревня Рай","kind":"locality"}
-
 class Properties {
   Properties({
     String? name,
     String? description,
-    List<List<double>>? boundedBy,
     GeocoderMetaData? geocoderMetaData,
     ResponseMetaData? responseMetaData,
   }) {
     _name = name;
     _description = description;
-    _boundedBy = boundedBy;
+
     _geocoderMetaData = geocoderMetaData;
   }
 
   Properties.fromJson(dynamic json) {
     _name = json['name'];
     _description = json['description'];
-    _boundedBy =
-        json['boundedBy'] != null ? json['boundedBy'].cast<double>() : [];
     _geocoderMetaData = json['GeocoderMetaData'] != null
         ? GeocoderMetaData.fromJson(json['GeocoderMetaData'])
         : null;
   }
   String? _name;
   String? _description;
-  List<List<double>>? _boundedBy;
+
   GeocoderMetaData? _geocoderMetaData;
   Properties copyWith({
     String? name,
@@ -149,29 +133,22 @@ class Properties {
       Properties(
         name: name ?? _name,
         description: description ?? _description,
-        boundedBy: boundedBy ?? _boundedBy,
         geocoderMetaData: geocoderMetaData ?? _geocoderMetaData,
       );
   String? get name => _name;
   String? get description => _description;
-  List<List<double>>? get boundedBy => _boundedBy;
   GeocoderMetaData? get geocoderMetaData => _geocoderMetaData;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['name'] = _name;
     map['description'] = _description;
-    map['boundedBy'] = _boundedBy;
     if (_geocoderMetaData != null) {
       map['GeocoderMetaData'] = _geocoderMetaData?.toJson();
     }
     return map;
   }
 }
-
-/// precision : "other"
-/// text : "Россия, Смоленский район, деревня Рай"
-/// kind : "locality"
 
 class GeocoderMetaData {
   GeocoderMetaData({
@@ -215,9 +192,6 @@ class GeocoderMetaData {
   }
 }
 
-/// type : "Point"
-/// coordinates : [32.016406,54.705044]
-
 class Geometry {
   Geometry({
     String? type,
@@ -253,8 +227,6 @@ class Geometry {
   }
 }
 
-/// ResponseMetaData : {"SearchResponse":{"found":10,"display":"single","boundedBy":[[31.998377,54.696756],[32.031372,54.714152]]},"SearchRequest":{"request":"Рай,Россия","skip":0,"results":10,"boundedBy":[[37.048427,55.43644866],[38.175903,56.04690174]]}}
-
 class Properties1 {
   Properties1({
     ResponseMetaData? responseMetaData,
@@ -284,9 +256,6 @@ class Properties1 {
     return map;
   }
 }
-
-/// SearchResponse : {"found":10,"display":"single","boundedBy":[[31.998377,54.696756],[32.031372,54.714152]]}
-/// SearchRequest : {"request":"Рай,Россия","skip":0,"results":10,"boundedBy":[[37.048427,55.43644866],[38.175903,56.04690174]]}
 
 class ResponseMetaData {
   ResponseMetaData({
@@ -329,11 +298,6 @@ class ResponseMetaData {
     return map;
   }
 }
-
-/// request : "Рай,Россия"
-/// skip : 0
-/// results : 10
-/// boundedBy : [[37.048427,55.43644866],[38.175903,56.04690174]]
 
 class SearchRequest {
   SearchRequest({
@@ -385,10 +349,6 @@ class SearchRequest {
     return map;
   }
 }
-
-/// found : 10
-/// display : "single"
-/// boundedBy : [[31.998377,54.696756],[32.031372,54.714152]]
 
 class SearchResponse {
   SearchResponse({
