@@ -15,6 +15,9 @@ class _AddRoutePageState extends State<AddRoutePage> {
   late YandexMapController controller;
   final animation =
       const MapAnimation(type: MapAnimationType.smooth, duration: 2.0);
+  final List<MapObject> mapObjects = [];
+  final MapObjectId targetMapObjectId = const MapObjectId('target_placemark');
+  late final Placemark placemark;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +34,31 @@ class _AddRoutePageState extends State<AddRoutePage> {
         body: SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
-            child: Column(
-              children: [
-                BlocBuilder<AddRouteBloc, AddRouteState>(
-                  builder: (BuildContext context, state) {
-                    return TextField(
+            child: BlocConsumer<AddRouteBloc, AddRouteState>(
+              listener: (BuildContext context, state) async {
+                if (state.point != null) {
+                  FocusScope.of(context).unfocus();
+                  final placemark = Placemark(
+                      mapId: targetMapObjectId,
+                      point: state.point!,
+                      opacity: 0.7,
+                      icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                          image: BitmapDescriptor.fromAssetImage(
+                              'assets/images/place.png'))));
+                  mapObjects.removeWhere((e) => e.mapId == targetMapObjectId);
+                  mapObjects.add(placemark);
+                  await controller.moveCamera(CameraUpdate.zoomTo(1),
+                      animation: animation);
+                  await controller.moveCamera(
+                      CameraUpdate.newCameraPosition(
+                          CameraPosition(target: state.point!)),
+                      animation: animation);
+                }
+              },
+              builder: (BuildContext context, state) {
+                return Column(
+                  children: [
+                    TextField(
                       decoration: const InputDecoration(
                         labelText: 'Выберете город',
                         focusedBorder: OutlineInputBorder(
@@ -51,37 +74,30 @@ class _AddRoutePageState extends State<AddRoutePage> {
                           ),
                         ),
                       ),
-                      onSubmitted: (value) async {
+                      onSubmitted: (value) {
                         context
                             .read<AddRouteBloc>()
                             .add(InputTextSubmitted(value: value));
-                          if (state.point != null) {
-                            FocusScope.of(context).unfocus();
-                            await controller.moveCamera(CameraUpdate.zoomTo(1),
-                                animation: animation);
-                            await controller.moveCamera(
-                                CameraUpdate.newCameraPosition(
-                                    CameraPosition(target: state.point!)),
-                                animation: animation);
-                          }
                       },
-                    );
-                  },
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height / 3,
-                  child: YandexMap(
-                    nightModeEnabled: false,
-                    rotateGesturesEnabled: false,
-                    onMapCreated: (YandexMapController yandexMapController) {
-                      controller = yandexMapController;
-                    },
-                  ),
-                ),
-              ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      child: YandexMap(
+                        nightModeEnabled: false,
+                        rotateGesturesEnabled: false,
+                        mapObjects: mapObjects,
+                        onMapCreated:
+                            (YandexMapController yandexMapController) {
+                          controller = yandexMapController;
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),
