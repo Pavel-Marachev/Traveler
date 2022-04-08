@@ -41,71 +41,71 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
         builder: (context, state) {
-      return MaterialApp(
-        title: 'Traveler',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          bottomNavigationBar: Container(
-            margin: const EdgeInsets.all(15),
-            height: 60,
-            decoration: BoxDecoration(
-              color: kBackgroundWidgetColor.withOpacity(0.9),
-              borderRadius: BorderRadius.circular(30),
+          return MaterialApp(
+            title: 'Traveler',
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              backgroundColor: kBackgroundWidgetColor,
+              bottomNavigationBar: BottomNavigationBar(
+                unselectedItemColor: kWidgetColor.withOpacity(0.6),
+                selectedItemColor: kWidgetColor,
+                backgroundColor: kMainColor.withOpacity(0.3),
+                currentIndex: getCurrentIndex(state),
+                onTap: (value) {
+                  switch (value) {
+                    case 0:
+                      context
+                          .read<NavigationBloc>()
+                          .add(PressedOnPlacesListPage());
+                      break;
+                    case 1:
+                      context.read<NavigationBloc>().add(PressedOnHomePage());
+                      break;
+                    case 2:
+                      context.read<NavigationBloc>().add(
+                          PressedOnAddRoutePage());
+                      break;
+                  }
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      "assets/images/list_icon.svg",
+                      color: kWidgetColor
+                          .withOpacity(getCurrentIndex(state) == 0 ? 1 : 0.6),
+                    ),
+                    label: "Маршруты",
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      "assets/images/home_icon.svg",
+                      color: kWidgetColor
+                          .withOpacity(getCurrentIndex(state) == 1 ? 1 : 0.6),
+                    ),
+                    label: "Главная",
+                  ),
+                  BottomNavigationBarItem(
+                    icon: SvgPicture.asset(
+                      "assets/images/travel_add_icon.svg",
+                      color: kWidgetColor
+                          .withOpacity(getCurrentIndex(state) == 2 ? 1 : 0.6),
+                    ),
+                    label: "Планирование",
+                  ),
+                ],
+              ),
+              body: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(begin: Alignment(0, 1),
+                    end: Alignment(1, 0.2),
+                    colors: <Color> [
+                      kMainColor,
+                      kBackgroundWidgetColor.withOpacity(0.9),
+                    ],),
+                ),
+                child: getPageState(state),),
             ),
-            child: BottomNavigationBar(
-              unselectedItemColor: kWidgetColor.withOpacity(0.6),
-              selectedItemColor: kWidgetColor,
-              backgroundColor: Colors.transparent,
-              currentIndex: getCurrentIndex(state),
-              onTap: (value) {
-                switch (value) {
-                  case 0:
-                    context
-                        .read<NavigationBloc>()
-                        .add(PressedOnPlacesListPage());
-                    break;
-                  case 1:
-                    context.read<NavigationBloc>().add(PressedOnHomePage());
-                    break;
-                  case 2:
-                    context.read<NavigationBloc>().add(PressedOnAddRoutePage());
-                    break;
-                }
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    "assets/images/list_icon.svg",
-                    color: kWidgetColor
-                        .withOpacity(getCurrentIndex(state) == 0 ? 1 : 0.6),
-                  ),
-                  label: "Маршруты",
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    "assets/images/home_icon.svg",
-                    color: kWidgetColor
-                        .withOpacity(getCurrentIndex(state) == 1 ? 1 : 0.6),
-                  ),
-                  label: "Главная",
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    "assets/images/travel_add_icon.svg",
-                    color: kWidgetColor
-                        .withOpacity(getCurrentIndex(state) == 2 ? 1 : 0.6),
-                  ),
-                  label: "Планирование",
-                ),
-              ],
-            ),
-          ),
-          body: getPageState(state),
-        ),
-      );
-    });
+          );
+        });
   }
 }

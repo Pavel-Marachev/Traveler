@@ -12,14 +12,17 @@ class _PlacesListPageState extends State<PlacesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Маршруты'),
-        backgroundColor: kBackgroundWidgetColor.withOpacity(0.9),
-      ),
+      backgroundColor: Colors.transparent,
       body: Container(
-        margin: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+          gradient: LinearGradient(
+            begin: Alignment(0.5, 1),
+            end: Alignment(0.5, -1),
+            colors: <Color>[
+              kMainColor,
+              kBackgroundWidgetColor.withOpacity(0.9),
+            ],
+          ),
         ),
       ),
     );

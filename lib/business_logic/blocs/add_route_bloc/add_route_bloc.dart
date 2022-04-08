@@ -20,8 +20,10 @@ class AddRouteBloc extends Bloc<AddRouteEvent, AddRouteState> {
       InputTextSubmitted event, Emitter<AddRouteState> emit) async {
     GeographicObjectsModel itemModel =
         await _repository.fetchObjectsList(event.value);
-    _latitude = itemModel.features?[0].geometry?.coordinates?[1];
-    _longitude = itemModel.features?[0].geometry?.coordinates?[0];
+        if (itemModel.features!.isNotEmpty) {
+          _latitude = itemModel.features?[0].geometry?.coordinates?[1];
+          _longitude = itemModel.features?[0].geometry?.coordinates?[0];
+        }
     if (_latitude != null && _longitude != null) {
       point = Point(latitude: _latitude!, longitude: _longitude!);
       emit(state.copyWith(point: point));

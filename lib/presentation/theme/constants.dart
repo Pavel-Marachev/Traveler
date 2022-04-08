@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-const kBackgroundWidgetColor = Color(0x00000000);
+const kBackgroundWidgetColor = Color(0xFF000000);
 const kWidgetColor = Color(0xFFFFFFFF);
+const kMainColor = Colors.teal;
 
 const TextStyle kTextStyleTitle = TextStyle(
   fontSize: 18,

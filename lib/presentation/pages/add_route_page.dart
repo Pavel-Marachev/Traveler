@@ -23,81 +23,105 @@ class _AddRoutePageState extends State<AddRoutePage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AddRouteBloc(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Планирование маршрута',
-            style: kTextStyleTitle,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0.5, 1),
+            end: Alignment(0.5, -1),
+            colors: <Color>[
+              kMainColor,
+              kBackgroundWidgetColor.withOpacity(0.9),
+            ],
           ),
-          backgroundColor: kBackgroundWidgetColor.withOpacity(0.9),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
-            child: BlocConsumer<AddRouteBloc, AddRouteState>(
-              listener: (BuildContext context, state) async {
-                if (state.point != null) {
-                  FocusScope.of(context).unfocus();
-                  final placemark = Placemark(
-                      mapId: targetMapObjectId,
-                      point: state.point!,
-                      opacity: 0.7,
-                      icon: PlacemarkIcon.single(PlacemarkIconStyle(
-                          image: BitmapDescriptor.fromAssetImage(
-                              'assets/images/place.png'))));
-                  mapObjects.removeWhere((e) => e.mapId == targetMapObjectId);
-                  mapObjects.add(placemark);
-                  await controller.moveCamera(CameraUpdate.zoomTo(1),
-                      animation: animation);
-                  await controller.moveCamera(
-                      CameraUpdate.newCameraPosition(
-                          CameraPosition(target: state.point!)),
-                      animation: animation);
-                }
-              },
-              builder: (BuildContext context, state) {
-                return Column(
-                  children: [
-                    TextField(
-                      decoration: const InputDecoration(
-                        labelText: 'Выберете город',
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.blue,
-                            width: 2,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          // appBar: AppBar(
+          //   title: const Text(
+          //     'Планирование маршрута',
+          //     style: kTextStyleTitle,
+          //   ),
+          //   backgroundColor: kBackgroundWidgetColor.withOpacity(0.9),
+          // ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
+                child: BlocConsumer<AddRouteBloc, AddRouteState>(
+                  listener: (BuildContext context, state) async {
+                    if (state.point != null) {
+                      FocusScope.of(context).unfocus();
+                      final placemark = Placemark(
+                          mapId: targetMapObjectId,
+                          point: state.point!,
+                          opacity: 0.7,
+                          icon: PlacemarkIcon.single(PlacemarkIconStyle(
+                              image: BitmapDescriptor.fromAssetImage(
+                                  'assets/images/place.png'))));
+                      mapObjects.removeWhere((e) => e.mapId == targetMapObjectId);
+                      mapObjects.add(placemark);
+                      await controller.moveCamera(CameraUpdate.zoomTo(1),
+                          animation: animation);
+                      await controller.moveCamera(
+                          CameraUpdate.newCameraPosition(
+                              CameraPosition(target: state.point!)),
+                          animation: animation);
+                    }
+                  },
+                  builder: (BuildContext context, state) {
+                    return Column(
+                      children: [
+                        TextField(
+                          style: kTextStyleTitle.copyWith(fontSize: 16),
+                          decoration: InputDecoration(
+                            labelStyle: kTextStyleTitle.copyWith(fontSize: 16),
+                            labelText: 'Выберете город',
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: kWidgetColor,
+                                width: 2,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(
+                                color: kWidgetColor,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                          onSubmitted: (value) {
+                            if(value.isNotEmpty){
+                              context
+                                  .read<AddRouteBloc>()
+                                  .add(InputTextSubmitted(value: value));
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: YandexMap(
+                              nightModeEnabled: false,
+                              rotateGesturesEnabled: false,
+                              mapObjects: mapObjects,
+                              onMapCreated:
+                                  (YandexMapController yandexMapController) {
+                                controller = yandexMapController;
+                              },
+                            ),
                           ),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black54,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                      onSubmitted: (value) {
-                        context
-                            .read<AddRouteBloc>()
-                            .add(InputTextSubmitted(value: value));
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height / 3,
-                      child: YandexMap(
-                        nightModeEnabled: false,
-                        rotateGesturesEnabled: false,
-                        mapObjects: mapObjects,
-                        onMapCreated:
-                            (YandexMapController yandexMapController) {
-                          controller = yandexMapController;
-                        },
-                      ),
-                    ),
-                  ],
-                );
-              },
+                      ],
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ),
