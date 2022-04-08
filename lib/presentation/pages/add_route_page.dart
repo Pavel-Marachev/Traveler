@@ -36,13 +36,6 @@ class _AddRoutePageState extends State<AddRoutePage> {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          // appBar: AppBar(
-          //   title: const Text(
-          //     'Планирование маршрута',
-          //     style: kTextStyleTitle,
-          //   ),
-          //   backgroundColor: kBackgroundWidgetColor.withOpacity(0.9),
-          // ),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Container(
