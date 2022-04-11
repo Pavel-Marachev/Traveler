@@ -42,6 +42,7 @@ dev_dependencies:
   flutter_bloc: ^8.0.1
   yandex_mapkit: ^2.0.3
   http: ^0.13.4
+  firebase_auth: ^3.3.13
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
