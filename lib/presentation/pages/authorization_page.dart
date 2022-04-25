@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:traveler/main.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -156,10 +157,13 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                 GestureDetector(
                                   onTap: () async {
                                     try {
-                                      var sd = await _auth.signInWithEmailAndPassword(
+                                      await _auth.signInWithEmailAndPassword(
                                           email: emailController.text,
                                           password: passwordController.text);
-                                      print('OK');
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MyApp()));
                                     } on FirebaseAuthException catch (e) {
                                       if (e.code == 'user-not-found') {
                                         print('No user found for that email.');
