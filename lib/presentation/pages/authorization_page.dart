@@ -154,8 +154,19 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                 ),
                                 const SizedBox(height: 20),
                                 GestureDetector(
-                                  onTap: () {
-
+                                  onTap: () async {
+                                    try {
+                                      var sd = await _auth.signInWithEmailAndPassword(
+                                          email: emailController.text,
+                                          password: passwordController.text);
+                                      print('OK');
+                                    } on FirebaseAuthException catch (e) {
+                                      if (e.code == 'user-not-found') {
+                                        print('No user found for that email.');
+                                      } else if (e.code == 'wrong-password') {
+                                        print('Wrong password provided.');
+                                      }
+                                    }
                                   },
                                   child: Container(
                                     width: double.infinity,

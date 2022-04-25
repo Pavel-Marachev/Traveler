@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "676154272146",
+    "project_id": "traveler-8b589",
+    "storage_bucket": "traveler-8b589.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676154272146:android:1a8d59ff607f64f8b9b94b",
+        "android_client_info": {
+          "package_name": "com.example.traveler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676154272146-fit0ac9233k8pbo70pneu7d1gh9jq4nb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWr9iGw4gSbJmEpvVYCO1gaQxOXmJb-54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676154272146-fit0ac9233k8pbo70pneu7d1gh9jq4nb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "676154272146-1spbjui60gu517kshddb5crp9obj7ti4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.traveler"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

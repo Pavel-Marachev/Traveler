@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveler/business_logic/blocs/navigation_bloc/navigation_bloc.dart';
+import 'package:traveler/firebase_options.dart';
 import 'package:traveler/presentation/pages/add_route_page.dart';
 import 'package:traveler/presentation/pages/authorization_page.dart';
 
@@ -8,25 +9,11 @@ import 'package:traveler/presentation/pages/home_page.dart';
 import 'package:traveler/presentation/pages/places_list_page.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:traveler/presentation/theme/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  //  await Firebase.initializeApp(
-  //    options: const FirebaseOptions(
-  //      apiKey: 'AIzaSyDb1clrvC_7_UWt0H7hnMdRxidx72ZZeaM',
-  //      appId: '1:448618578101:web:0b650370bb29e29cac3efc',
-  //      messagingSenderId: '448618578101',
-  //      projectId: 'traveler-8b589',
-  //      authDomain: 'react-native-firebase-testing.firebaseapp.com',
-  //      databaseURL: 'https://react-native-firebase-testing.firebaseio.com',
-  //      storageBucket: 'react-native-firebase-testing.appspot.com',
-  //      measurementId: 'G-F79DJ0VFGS',
-  //    ),
-  //  );
-  //
-  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(BlocProvider(
       create: (context) => NavigationBloc()..add(AppStarted()),
