@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:traveler/presentation/pages/authorization_page.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:traveler/presentation/widgets/tile_with_number_of_travel.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -41,8 +43,27 @@ class HomePage extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    const SizedBox(height: 10),
-                    const Text("Traveler", style: kTextStyleTitle),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AuthorizationPage())),
+                          child: SvgPicture.asset(
+                            "assets/images/logout_icon.svg",
+                            color: kWidgetColor,
+                          ),
+                        ),
+                        const Text("Traveler", style: kTextStyleTitle),
+                        SvgPicture.asset(
+                          "assets/images/logout_icon.svg",
+                          color: Colors.transparent,
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 20),
                     Expanded(
                       child: Container(
@@ -52,8 +73,7 @@ class HomePage extends StatelessWidget {
                         ),
                         child: Center(
                           child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 30),
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: RichText(
                               text: TextSpan(
                                 style: kTextStyleTitle,

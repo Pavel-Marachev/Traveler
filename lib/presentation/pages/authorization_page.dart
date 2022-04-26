@@ -1,7 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:traveler/business_logic/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:traveler/main.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:traveler/presentation/widgets/authorization_text_field.dart';
 
 class AuthorizationPage extends StatefulWidget {
   const AuthorizationPage({Key? key}) : super(key: key);
@@ -11,186 +15,147 @@ class AuthorizationPage extends StatefulWidget {
 }
 
 class _AuthorizationPageState extends State<AuthorizationPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordConfirmationController =
+      TextEditingController();
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isRegistration = false;
   String error = '';
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: const Alignment(0.5, 1),
-              end: const Alignment(0.5, -1),
-              colors: <Color>[
-                kMainColor,
-                kBackgroundWidgetColor.withOpacity(0.9),
-              ],
-            ),
-          ),
-          child: Center(
-            child: SingleChildScrollView(
+    return BlocProvider(
+      create: (_) => AuthorizationBloc(),
+      child: GestureDetector(
+        onTap: FocusScope.of(context).unfocus,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: const Alignment(0.5, 1),
+                  end: const Alignment(0.5, -1),
+                  colors: <Color>[
+                    kMainColor,
+                    kBackgroundWidgetColor.withOpacity(0.9),
+                  ],
+                ),
+              ),
               child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SafeArea(
-                    child: Form(
-                      key: formKey,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 400),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Visibility(
-                              visible: error.isNotEmpty,
-                              child: MaterialBanner(
-                                backgroundColor: Theme.of(context).errorColor,
-                                content: Text(error),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        error = '';
-                                      });
-                                    },
-                                    child: const Text(
-                                      'dismiss',
-                                      style: TextStyle(color: kWidgetColor),
-                                    ),
-                                  )
-                                ],
-                                contentTextStyle:
-                                    const TextStyle(color: kWidgetColor),
-                                padding: const EdgeInsets.all(10),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Column(
-                              children: [
-                                TextFormField(
-                                  style: kTextStyleTitle,
-                                  cursorColor: kWidgetColor,
-                                  controller: emailController,
-                                  decoration: InputDecoration(
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SafeArea(
+                        child: Form(
+                          key: formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 400),
+                            child: BlocBuilder<AuthorizationBloc,
+                                    AuthorizationState>(
+                                builder: (BuildContext context, state) {
+                              return Column(
+                                children: [
+                                  Text(
+                                    isRegistration ? 'Registration' : 'Login',
+                                    style:
+                                        kTextStyleTitle.copyWith(fontSize: 24),
+                                  ),
+                                  const SizedBox(height: 50),
+                                  AuthorizationTextField(
                                     hintText: 'Email',
-                                    hintStyle: kTextStyleTitle,
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: const BorderSide(
-                                          color: kErrorColor, width: 2.0),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: BorderSide(
-                                          color: kErrorColor.withOpacity(0.7),
-                                          width: 2.0),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: BorderSide(
-                                          color: kWidgetColor.withOpacity(0.7),
-                                          width: 2.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: const BorderSide(
-                                        width: 2,
-                                        color: kWidgetColor,
-                                      ),
-                                    ),
-                                    border: const OutlineInputBorder(),
+                                    controller: emailController,
+                                    obscureText: false,
                                   ),
-                                  validator: (value) =>
-                                      value != null && value.isNotEmpty
-                                          ? null
-                                          : 'Required',
-                                ),
-                                const SizedBox(height: 20),
-                                TextFormField(
-                                  style: kTextStyleTitle,
-                                  cursorColor: kWidgetColor,
-                                  controller: passwordController,
-                                  obscureText: true,
-                                  decoration: InputDecoration(
+                                  const SizedBox(height: 20),
+                                  AuthorizationTextField(
                                     hintText: 'Password',
-                                    hintStyle: kTextStyleTitle,
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: const BorderSide(
-                                          color: kErrorColor, width: 2.0),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: BorderSide(
-                                          color: kErrorColor.withOpacity(0.7),
-                                          width: 2.0),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: BorderSide(
-                                          color: kWidgetColor.withOpacity(0.7),
-                                          width: 2.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: const BorderSide(
-                                        width: 2,
-                                        color: kWidgetColor,
-                                      ),
-                                    ),
-                                    border: const OutlineInputBorder(),
+                                    controller: passwordController,
+                                    obscureText: true,
                                   ),
-                                  validator: (value) =>
-                                      value != null && value.isNotEmpty
-                                          ? null
-                                          : 'Required',
-                                ),
-                                const SizedBox(height: 20),
-                                GestureDetector(
-                                  onTap: () async {
-                                    try {
-                                      await _auth.signInWithEmailAndPassword(
-                                          email: emailController.text,
-                                          password: passwordController.text);
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MyApp()));
-                                    } on FirebaseAuthException catch (e) {
-                                      if (e.code == 'user-not-found') {
-                                        print('No user found for that email.');
-                                      } else if (e.code == 'wrong-password') {
-                                        print('Wrong password provided.');
+                                  if (isRegistration)
+                                    const SizedBox(height: 20),
+                                  if (isRegistration)
+                                    AuthorizationTextField(
+                                      hintText: 'Repeat your password',
+                                      controller:
+                                          passwordConfirmationController,
+                                      obscureText: true,
+                                    ),
+                                  const SizedBox(height: 20),
+                                  GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                      if (emailController.text.isEmpty &&
+                                          passwordController.text.isEmpty) {
+                                        error = 'Text fields are empty!';
                                       }
-                                    }
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: kWidgetColor.withOpacity(0.7),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Sign in',
-                                        style: kTextStyleTitle.copyWith(
-                                            color: kBackgroundWidgetColor),
+                                      context.read<AuthorizationBloc>().add(
+                                            AuthorizationConfirmed(
+                                              context: context,
+                                              isRegistration: isRegistration,
+                                              emailController: emailController,
+                                              passwordController:
+                                                  passwordController,
+                                              passwordConfirmationController:
+                                                  passwordConfirmationController,
+                                            ),
+                                          );
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: kWidgetColor.withOpacity(0.7),
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          isRegistration
+                                              ? 'Sign up'
+                                              : 'Sign in',
+                                          style: kTextStyleTitle.copyWith(
+                                              color: kBackgroundWidgetColor),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ],
+                                  const SizedBox(height: 10),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          style: kTextStyleFootnote,
+                                          text: isRegistration
+                                              ? 'Do you have an account? '
+                                              : 'Don\'t have an account? ',
+                                        ),
+                                        TextSpan(
+                                          style: kTextStyleFootnote.copyWith(
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.w900),
+                                          text: isRegistration
+                                              ? 'Sign in'
+                                              : 'Sign up',
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              context
+                                                  .read<AuthorizationBloc>()
+                                                  .add(LoginMethodChanged(
+                                                      !isRegistration));
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                          ),
                         ),
                       ),
                     ),
@@ -198,7 +163,31 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                 ),
               ),
             ),
-          ),
+            SafeArea(
+              child: Visibility(
+                visible: error.isNotEmpty,
+                child: MaterialBanner(
+                  backgroundColor: Theme.of(context).errorColor,
+                  content: Text(error),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          error = '';
+                        });
+                      },
+                      child: const Text(
+                        'dismiss',
+                        style: TextStyle(color: kWidgetColor),
+                      ),
+                    )
+                  ],
+                  contentTextStyle: const TextStyle(color: kWidgetColor),
+                  padding: const EdgeInsets.all(10),
+                ),
+              ),
+            ),
+          ]),
         ),
       ),
     );

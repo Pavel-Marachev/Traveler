@@ -9,3 +9,8 @@ const TextStyle kTextStyleTitle = TextStyle(
   fontSize: 18,
   color: Color(0xFFFFFFFF),
 );
+
+const TextStyle kTextStyleFootnote = TextStyle(
+  fontSize: 16,
+  color: Colors.grey,
+);
