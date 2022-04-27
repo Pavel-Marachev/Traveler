@@ -8,6 +8,12 @@ class LoginMethodChanged extends AuthorizationEvent {
   LoginMethodChanged(this.isRegistration) : super();
 }
 
+class InputErrorChanged extends AuthorizationEvent {
+  String error;
+
+  InputErrorChanged(this.error) : super();
+}
+
 class AuthorizationConfirmed extends AuthorizationEvent {
   bool isRegistration;
   TextEditingController emailController = TextEditingController();

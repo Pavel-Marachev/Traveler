@@ -10,11 +10,13 @@ part 'package:traveler/business_logic/blocs/authorization_bloc/authorization_sta
 class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
   AuthorizationBloc() : super(AuthorizationState()) {
     on<AuthorizationConfirmed>(authorization);
-    //on<LoginMethodChanged>((event, emit) => emit(state.copyWith(isRegistration: )));
+    on<LoginMethodChanged>((event, emit) =>
+        emit(state.copyWith(isRegistration: event.isRegistration)));
+    on<InputErrorChanged>(
+        (event, emit) => emit(state.copyWith(error: event.error)));
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String error = '';
 
   Future<void> authorization(
       AuthorizationConfirmed event, Emitter<AuthorizationState> emit) async {
@@ -28,7 +30,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
           Navigator.of(event.context).pushReplacement(
               MaterialPageRoute(builder: (context) => const MyApp()));
         } else {
-          error = 'Passwords do not match';
+          state.error = 'Passwords do not match';
         }
       } else {
         await _auth.signInWithEmailAndPassword(
@@ -39,13 +41,13 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        error = 'No user found for that email';
+        emit(state.copyWith(error: 'No user found for that email'));
       } else if (e.code == 'wrong-password') {
-        error = 'Wrong password provided';
+        emit(state.copyWith(error: 'Wrong password provided'));
       } else if (e.code == 'invalid-email') {
-        error = 'Invalid email entered';
+        emit(state.copyWith(error: 'Invalid email entered'));
       } else if (e.code == 'weak-password') {
-        error = 'Password should be at least 6 characters';
+        emit(state.copyWith(error: 'Password should be at least 6 characters'));
       }
     }
   }
