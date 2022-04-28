@@ -11,17 +11,31 @@ class PlacesListPage extends StatefulWidget {
 class _PlacesListPageState extends State<PlacesListPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment(0.5, 1),
-            end: Alignment(0.5, -1),
-            colors: <Color>[
-              kMainColor,
-              kBackgroundWidgetColor.withOpacity(0.9),
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: const Alignment(0.5, 1),
+          end: const Alignment(0.5, -1),
+          colors: <Color>[
+            kMainColor,
+            kBackgroundWidgetColor.withOpacity(0.9),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(
+            'Интересные места',
+            style: kTextStyleTitle,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              children: [],
+            ),
           ),
         ),
       ),

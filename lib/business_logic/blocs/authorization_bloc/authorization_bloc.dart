@@ -24,15 +24,17 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
       if (event.isRegistration) {
         if (event.passwordController.text ==
             event.passwordConfirmationController.text) {
+          emit(state.copyWith(isLoading: true));
           await _auth.createUserWithEmailAndPassword(
               email: event.emailController.text,
               password: event.passwordController.text);
           Navigator.of(event.context).pushReplacement(
               MaterialPageRoute(builder: (context) => const MyApp()));
         } else {
-          state.error = 'Passwords do not match';
+          emit(state.copyWith(error: 'Passwords do not match'));
         }
       } else {
+        emit(state.copyWith(isLoading: true));
         await _auth.signInWithEmailAndPassword(
             email: event.emailController.text,
             password: event.passwordController.text);
@@ -40,6 +42,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
             MaterialPageRoute(builder: (context) => const MyApp()));
       }
     } on FirebaseAuthException catch (e) {
+      emit(state.copyWith(isLoading: false));
       if (e.code == 'user-not-found') {
         emit(state.copyWith(error: 'No user found for that email'));
       } else if (e.code == 'wrong-password') {
@@ -48,6 +51,8 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
         emit(state.copyWith(error: 'Invalid email entered'));
       } else if (e.code == 'weak-password') {
         emit(state.copyWith(error: 'Password should be at least 6 characters'));
+      } else {
+        emit(state.copyWith(error: e.message));
       }
     }
   }

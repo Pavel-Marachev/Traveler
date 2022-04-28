@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const kBackgroundWidgetColor = Color(0xFF000000);
 const kWidgetColor = Color(0xFFFFFFFF);
+const kInactiveWidgetColor = Colors.grey;
 const kMainColor = Colors.teal;
 const kErrorColor = Color(0xFFF44336);
 

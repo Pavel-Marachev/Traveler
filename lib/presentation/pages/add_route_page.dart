@@ -17,7 +17,7 @@ class _AddRoutePageState extends State<AddRoutePage> {
       const MapAnimation(type: MapAnimationType.smooth, duration: 2.0);
   final List<MapObject> mapObjects = [];
   final MapObjectId targetMapObjectId = const MapObjectId('target_placemark');
-  late final Placemark placemark;
+  late final Placemark placeMark;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,8 @@ class _AddRoutePageState extends State<AddRoutePage> {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment(0.5, 1),
-            end: Alignment(0.5, -1),
+            begin: const Alignment(0.5, 1),
+            end: const Alignment(0.5, -1),
             colors: <Color>[
               kMainColor,
               kBackgroundWidgetColor.withOpacity(0.9),
@@ -44,7 +44,7 @@ class _AddRoutePageState extends State<AddRoutePage> {
                   listener: (BuildContext context, state) async {
                     if (state.point != null) {
                       FocusScope.of(context).unfocus();
-                      final placemark = Placemark(
+                      placeMark = Placemark(
                           mapId: targetMapObjectId,
                           point: state.point!,
                           opacity: 0.7,
@@ -52,7 +52,7 @@ class _AddRoutePageState extends State<AddRoutePage> {
                               image: BitmapDescriptor.fromAssetImage(
                                   'assets/images/place.png'))));
                       mapObjects.removeWhere((e) => e.mapId == targetMapObjectId);
-                      mapObjects.add(placemark);
+                      mapObjects.add(placeMark);
                       await controller.moveCamera(CameraUpdate.zoomTo(1),
                           animation: animation);
                       await controller.moveCamera(
@@ -71,14 +71,14 @@ class _AddRoutePageState extends State<AddRoutePage> {
                             labelText: 'Выберете город',
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: kWidgetColor,
                                 width: 2,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 color: kWidgetColor,
                                 width: 2,
                               ),
@@ -95,8 +95,12 @@ class _AddRoutePageState extends State<AddRoutePage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        SizedBox(
+                        Container(
                           height: MediaQuery.of(context).size.height / 3,
+                          decoration: BoxDecoration(
+                            color: kInactiveWidgetColor,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: YandexMap(

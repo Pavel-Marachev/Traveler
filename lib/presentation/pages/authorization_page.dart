@@ -91,7 +91,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                         onTap: () {
                                           FocusScope.of(context).unfocus();
                                           if (emailController.text.isEmpty &&
-                                              passwordController.text.isEmpty) {
+                                              passwordController.text.isEmpty && !state.isLoading) {
                                             context
                                                 .read<AuthorizationBloc>()
                                                 .add(InputErrorChanged(
@@ -121,7 +121,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                                 BorderRadius.circular(30),
                                           ),
                                           child: Center(
-                                            child: Text(
+                                            child: state.isLoading ? const CircularProgressIndicator(color: kWidgetColor, strokeWidth: 3,) : Text(
                                               state.isRegistration
                                                   ? 'Sign up'
                                                   : 'Sign in',
