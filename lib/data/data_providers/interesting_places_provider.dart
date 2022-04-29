@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' show Client;
 
 import 'package:traveler/data/models/interesting_places_model.dart';
+import 'package:traveler/data/models/place_information_model.dart';
 
 class InterestingPlacesProvider {
   final Client _client = Client();
@@ -14,6 +15,16 @@ class InterestingPlacesProvider {
       return InterestingPlacesModel.fromJson(json.decode(response.body));
     } else {
       return InterestingPlacesModel();
+    }
+  }
+
+  Future<PlaceInformationModel> fetchPlaceInformation(String xid) async {
+    final response = await _client.get(Uri.parse(
+        'http://api.opentripmap.com/0.1/ru/places/xid/$xid?apikey=$_apiKey'));
+    if (response.statusCode == 200) {
+      return PlaceInformationModel.fromJson(json.decode(response.body));
+    } else {
+      return PlaceInformationModel();
     }
   }
 }

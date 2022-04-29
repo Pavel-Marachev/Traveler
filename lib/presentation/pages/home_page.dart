@@ -28,14 +28,7 @@ class HomePage extends StatelessWidget {
                 kBackgroundWidgetColor.withOpacity(0.9),
               ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: kBackgroundWidgetColor.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 7,
-                offset: Offset(0, 4),
-              ),
-            ],
+            boxShadow: kMainShadow,
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
@@ -47,7 +40,7 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => const AuthorizationPage())),
                 child: Padding(
-                  padding: const EdgeInsets.all(13.0),
+                  padding: const EdgeInsets.all(14.0),
                   child: SvgPicture.asset(
                     "assets/images/logout_icon.svg",
                     color: kWidgetColor,
@@ -116,14 +109,7 @@ class HomePage extends StatelessWidget {
           decoration: BoxDecoration(
             color: kMainColor.withOpacity(0.8),
             borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
-                color: kBackgroundWidgetColor.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 7,
-                offset: Offset(0, 4),
-              ),
-            ],
+            boxShadow: kMainShadow,
           ),
         ),
         const Spacer(),

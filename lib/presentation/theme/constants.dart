@@ -15,3 +15,12 @@ const TextStyle kTextStyleFootnote = TextStyle(
   fontSize: 16,
   color: Colors.grey,
 );
+
+List<BoxShadow> kMainShadow = [
+  BoxShadow(
+    color: kBackgroundWidgetColor.withOpacity(0.2),
+    spreadRadius: 2,
+    blurRadius: 7,
+    offset: Offset(0, 4),
+  )
+];
