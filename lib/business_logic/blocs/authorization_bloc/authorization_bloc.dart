@@ -26,7 +26,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
             event.passwordConfirmationController.text) {
           emit(state.copyWith(isLoading: true));
           await _auth.createUserWithEmailAndPassword(
-              email: event.emailController.text,
+              email: event.emailController.text.trim(),
               password: event.passwordController.text);
           Navigator.of(event.context).pushReplacement(
               MaterialPageRoute(builder: (context) => const MyApp()));
@@ -36,7 +36,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
       } else {
         emit(state.copyWith(isLoading: true));
         await _auth.signInWithEmailAndPassword(
-            email: event.emailController.text,
+            email: event.emailController.text.trim(),
             password: event.passwordController.text);
         Navigator.of(event.context).pushReplacement(
             MaterialPageRoute(builder: (context) => const MyApp()));
