@@ -35,6 +35,7 @@ class HomePage extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
+              centerTitle: true,
               leading: GestureDetector(
                 onTap: () => Navigator.of(context).pushReplacement(
                     MaterialPageRoute(

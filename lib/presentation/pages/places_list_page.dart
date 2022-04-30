@@ -28,6 +28,7 @@ class _PlacesListPageState extends State<PlacesListPage> {
         ),
         child: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.transparent,
             shadowColor: Colors.transparent,
             title: const Text(
