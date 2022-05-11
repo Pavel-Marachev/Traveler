@@ -15,18 +15,30 @@ class AddRouteBloc extends Bloc<AddRouteEvent, AddRouteState> {
   double? _latitude;
   double? _longitude;
   Point? point;
+  List<MapObject> mapObjects = [];
+  late Placemark placeMark;
 
   Future<void> fetchAllObjects(
       InputTextSubmitted event, Emitter<AddRouteState> emit) async {
     GeographicObjectsModel itemModel =
         await _repository.fetchObjectsList(event.value);
-        if (itemModel.features!.isNotEmpty) {
-          _latitude = itemModel.features?[0].geometry?.coordinates?[1];
-          _longitude = itemModel.features?[0].geometry?.coordinates?[0];
-        }
+    if (itemModel.features!.isNotEmpty) {
+      _latitude = itemModel.features?[0].geometry?.coordinates?[1];
+      _longitude = itemModel.features?[0].geometry?.coordinates?[0];
+    }
     if (_latitude != null && _longitude != null) {
       point = Point(latitude: _latitude!, longitude: _longitude!);
-      emit(state.copyWith(point: point));
+      placeMark = Placemark(
+          mapId: MapObjectId('${itemModel.features?[0].properties?.name}'),
+          point: point!,
+          opacity: 0.7,
+          icon: PlacemarkIcon.single(PlacemarkIconStyle(
+              image:
+                  BitmapDescriptor.fromAssetImage('assets/images/place.png'))));
+      mapObjects.removeWhere((e) =>
+          e.mapId == MapObjectId('${itemModel.features?[0].properties?.name}'));
+      mapObjects.add(placeMark);
+      emit(state.copyWith(mapObjects: mapObjects, point: point));
     }
   }
 }

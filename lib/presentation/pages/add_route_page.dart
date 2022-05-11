@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:traveler/business_logic/blocs/add_route_bloc/add_route_bloc.dart';
+import 'package:traveler/presentation/widgets/add_route_text_field.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class AddRoutePage extends StatefulWidget {
@@ -15,9 +16,6 @@ class _AddRoutePageState extends State<AddRoutePage> {
   late YandexMapController controller;
   final animation =
       const MapAnimation(type: MapAnimationType.smooth, duration: 2.0);
-  final List<MapObject> mapObjects = [];
-  final MapObjectId targetMapObjectId = const MapObjectId('target_placemark');
-  late final Placemark placeMark;
 
   @override
   Widget build(BuildContext context) {
@@ -44,48 +42,23 @@ class _AddRoutePageState extends State<AddRoutePage> {
                   listener: (BuildContext context, state) async {
                     if (state.point != null) {
                       FocusScope.of(context).unfocus();
-                      placeMark = Placemark(
-                          mapId: targetMapObjectId,
-                          point: state.point!,
-                          opacity: 0.7,
-                          icon: PlacemarkIcon.single(PlacemarkIconStyle(
-                              image: BitmapDescriptor.fromAssetImage(
-                                  'assets/images/place.png'))));
-                      mapObjects.removeWhere((e) => e.mapId == targetMapObjectId);
-                      mapObjects.add(placeMark);
-                      await controller.moveCamera(CameraUpdate.zoomTo(1),
-                          animation: animation);
+                      if (state.mapObjects?.length != 1) {
+                        await controller.moveCamera(CameraUpdate.zoomTo(5),
+                            animation: animation);
+                      }
                       await controller.moveCamera(
                           CameraUpdate.newCameraPosition(
-                              CameraPosition(target: state.point!)),
+                              CameraPosition(target: state.point!, zoom: 10)),
                           animation: animation);
                     }
                   },
                   builder: (BuildContext context, state) {
                     return Column(
                       children: [
-                        TextField(
-                          style: kTextStyleTitle.copyWith(fontSize: 16),
-                          decoration: InputDecoration(
-                            labelStyle: kTextStyleTitle.copyWith(fontSize: 16),
-                            labelText: 'Выберете город',
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                color: kWidgetColor,
-                                width: 2,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                color: kWidgetColor,
-                                width: 2,
-                              ),
-                            ),
-                          ),
+                        AddRouteTextField(
+                          labelText: 'Выберете город',
                           onSubmitted: (value) {
-                            if(value.isNotEmpty){
+                            if (value.isNotEmpty) {
                               context
                                   .read<AddRouteBloc>()
                                   .add(InputTextSubmitted(value: value));
@@ -106,13 +79,22 @@ class _AddRoutePageState extends State<AddRoutePage> {
                             child: YandexMap(
                               nightModeEnabled: false,
                               rotateGesturesEnabled: false,
-                              mapObjects: mapObjects,
+                              mapObjects: state.mapObjects ?? [],
                               onMapCreated:
                                   (YandexMapController yandexMapController) {
                                 controller = yandexMapController;
                               },
                             ),
                           ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        AddRouteTextField(
+                          labelText: 'Добавьте достопримечательность',
+                          onSubmitted: (value) {
+                            if (value.isNotEmpty) {}
+                          },
                         ),
                       ],
                     );

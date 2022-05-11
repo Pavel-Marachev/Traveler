@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' show Client;
 
 import 'package:traveler/data/models/geographic_objects_model.dart';
+import 'package:traveler/data/models/organizations_model.dart';
 
 class GeographicObjectsProvider {
   final Client _client = Client();
@@ -15,6 +16,17 @@ class GeographicObjectsProvider {
       return GeographicObjectsModel.fromJson(json.decode(response.body));
     } else {
       return GeographicObjectsModel();
+    }
+  }
+
+  Future<OrganizationsModel> fetchOrganizationsList(
+      String? _requestMessage) async {
+    final response = await _client.get(Uri.parse(
+        'https://search-maps.yandex.ru/v1/?text=$_requestMessage&type=biz&lang=ru_RU&results=1&apikey=$_apiKey'));
+    if (response.statusCode == 200) {
+      return OrganizationsModel.fromJson(json.decode(response.body));
+    } else {
+      return OrganizationsModel();
     }
   }
 }

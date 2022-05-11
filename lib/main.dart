@@ -13,12 +13,12 @@ import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(BlocProvider(
       create: (context) => NavigationBloc()..add(AppStarted()),
       child: const MaterialApp(
-        home: AuthorizationPage(),
+        home: MyApp(),
         debugShowCheckedModeBanner: false,
       )));
 }
