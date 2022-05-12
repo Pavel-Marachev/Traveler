@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
                   color: kWidgetColor
                       .withOpacity(getCurrentIndex(state) == 0 ? 1 : 0.6),
                 ),
-                label: "Маршруты",
+                label: "Места",
               ),
               BottomNavigationBarItem(
                 icon: SvgPicture.asset(

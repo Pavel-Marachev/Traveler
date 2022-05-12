@@ -5,12 +5,14 @@ class AuthorizationTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final void Function(String value)? onSubmitted;
 
   const AuthorizationTextField({
     Key? key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    this.onSubmitted,
   }) : super(key: key);
 
   @override
@@ -48,6 +50,7 @@ class AuthorizationTextField extends StatelessWidget {
       ),
       validator: (value) =>
           value != null && value.isNotEmpty ? null : 'Required',
+      onFieldSubmitted: (value) => onSubmitted!(value),
     );
   }
 }

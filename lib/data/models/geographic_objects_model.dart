@@ -2,7 +2,7 @@ class GeographicObjectsModel {
   GeographicObjectsModel({
     String? type,
     Properties? properties,
-    List<Features>? features,
+    List<ObjectFeatures>? features,
   }) {
     _type = type;
     _properties = properties;
@@ -17,17 +17,17 @@ class GeographicObjectsModel {
     if (json['features'] != null) {
       _features = [];
       json['features'].forEach((v) {
-        _features?.add(Features.fromJson(v));
+        _features?.add(ObjectFeatures.fromJson(v));
       });
     }
   }
   String? _type;
   Properties? _properties;
-  List<Features>? _features;
+  List<ObjectFeatures>? _features;
   GeographicObjectsModel copyWith({
     String? type,
     Properties? properties,
-    List<Features>? features,
+    List<ObjectFeatures>? features,
   }) =>
       GeographicObjectsModel(
         type: type ?? _type,
@@ -36,7 +36,7 @@ class GeographicObjectsModel {
       );
   String? get type => _type;
   Properties? get properties => _properties;
-  List<Features>? get features => _features;
+  List<ObjectFeatures>? get features => _features;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -51,8 +51,8 @@ class GeographicObjectsModel {
   }
 }
 
-class Features {
-  Features({
+class ObjectFeatures {
+  ObjectFeatures({
     String? type,
     Geometry? geometry,
     Properties? properties,
@@ -62,7 +62,7 @@ class Features {
     _properties = properties;
   }
 
-  Features.fromJson(dynamic json) {
+  ObjectFeatures.fromJson(dynamic json) {
     _type = json['type'];
     _geometry =
         json['geometry'] != null ? Geometry.fromJson(json['geometry']) : null;
@@ -73,12 +73,12 @@ class Features {
   String? _type;
   Geometry? _geometry;
   Properties? _properties;
-  Features copyWith({
+  ObjectFeatures copyWith({
     String? type,
     Geometry? geometry,
     Properties? properties,
   }) =>
-      Features(
+      ObjectFeatures(
         type: type ?? _type,
         geometry: geometry ?? _geometry,
         properties: properties ?? _properties,

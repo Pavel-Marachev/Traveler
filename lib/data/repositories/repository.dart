@@ -11,8 +11,9 @@ class Repository {
   Future<GeographicObjectsModel> fetchObjectsList(String requestMessage) =>
       geographicApiProvider.fetchObjectsList(requestMessage);
 
-  Future<InterestingPlacesModel> fetchPlacesList() =>
-      interestingPlacesProvider.fetchPlacesList();
+  Future<InterestingPlacesModel> fetchPlacesList(
+          {required double lon, required double lat}) =>
+      interestingPlacesProvider.fetchPlacesList(lon: lon, lat: lat);
 
   Future<PlaceInformationModel> fetchPlaceInformation(String xid) =>
       interestingPlacesProvider.fetchPlaceInformation(xid);
