@@ -2,8 +2,14 @@ part of 'package:traveler/business_logic/blocs/add_route_bloc/add_route_bloc.dar
 
 abstract class AddRouteEvent {}
 
-class InputTextSubmitted extends AddRouteEvent {
+class InputCitySubmitted extends AddRouteEvent {
   String value;
 
-  InputTextSubmitted({required this.value}) : super();
+  InputCitySubmitted(this.value) : super();
+}
+
+class InputPlaceSubmitted extends AddRouteEvent {
+  String value;
+
+  InputPlaceSubmitted(this.value) : super();
 }

@@ -5,7 +5,6 @@ import 'package:traveler/data/models/place_information_model.dart';
 import 'package:traveler/data/repositories/repository.dart';
 
 part 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_event.dart';
-
 part 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_state.dart';
 
 class InterestingPlacesBloc

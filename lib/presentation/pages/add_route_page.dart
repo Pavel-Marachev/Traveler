@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:traveler/business_logic/blocs/add_route_bloc/add_route_bloc.dart';
-import 'package:traveler/presentation/widgets/add_route_text_field.dart';
+import 'package:traveler/presentation/widgets/authorization_button.dart';
+import 'package:traveler/presentation/widgets/authorization_text_field.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class AddRoutePage extends StatefulWidget {
@@ -14,6 +15,7 @@ class AddRoutePage extends StatefulWidget {
 
 class _AddRoutePageState extends State<AddRoutePage> {
   late YandexMapController controller;
+  final TextEditingController _cityEditingController = TextEditingController();
   final animation =
       const MapAnimation(type: MapAnimationType.smooth, duration: 2.0);
 
@@ -42,7 +44,7 @@ class _AddRoutePageState extends State<AddRoutePage> {
                   listener: (BuildContext context, state) async {
                     if (state.point != null) {
                       FocusScope.of(context).unfocus();
-                      if (state.mapObjects?.length != 1) {
+                      if (!state.isFirstZoom) {
                         await controller.moveCamera(CameraUpdate.zoomTo(5),
                             animation: animation);
                       }
@@ -55,13 +57,16 @@ class _AddRoutePageState extends State<AddRoutePage> {
                   builder: (BuildContext context, state) {
                     return Column(
                       children: [
-                        AddRouteTextField(
-                          labelText: 'Выберете город',
+                        AuthorizationTextField(
+                          controller: _cityEditingController,
+                          hintText: 'Выберете город',
+                          borderRadius: 15,
+                          obscureText: false,
                           onSubmitted: (value) {
                             if (value.isNotEmpty) {
                               context
                                   .read<AddRouteBloc>()
-                                  .add(InputTextSubmitted(value: value));
+                                  .add(InputCitySubmitted(value));
                             }
                           },
                         ),
@@ -88,13 +93,14 @@ class _AddRoutePageState extends State<AddRoutePage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
-                        AddRouteTextField(
-                          labelText: 'Добавьте достопримечательность',
-                          onSubmitted: (value) {
-                            if (value.isNotEmpty) {}
-                          },
+                        AuthorizationButton(
+                          title: 'Загрузить сохраненные места',
+                          isLoading: false,
+                          color: kWidgetColor,
+                          opacity: 0.2,
+                          onTap: () {},
                         ),
                       ],
                     );

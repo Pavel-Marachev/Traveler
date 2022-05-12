@@ -43,6 +43,7 @@ class _PlacesListPageState extends State<PlacesListPage> {
                     centerTitle: true,
                     backgroundColor: kBackgroundWidgetColor.withOpacity(0.8),
                     pinned: true,
+                    floating: true,
                     expandedHeight: 150,
                     flexibleSpace: SafeArea(
                       child: FlexibleSpaceBar(
@@ -87,50 +88,99 @@ class _PlacesListPageState extends State<PlacesListPage> {
                                     color: kMainColor,
                                     boxShadow: kMainShadow,
                                   ),
-                                  child: ExpansionTile(
-                                    iconColor: kWidgetColor,
-                                    title: Text(
-                                      state.places![index].properties!.name!,
-                                      style: kTextStyleTitle,
+                                  child: Dismissible(
+                                    key: Key('$index'),
+                                    background: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.green,
+                                      ),
+                                      child: const Align(
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                              start: 16),
+                                          child: Icon(Icons.favorite),
+                                        ),
+                                        alignment: Alignment.centerLeft,
+                                      ),
                                     ),
-                                    subtitle: Text(
-                                      'Рейтинг: ${state.places![index].properties!.rate!}',
-                                      style: kTextStyleTitle,
+                                    secondaryBackground: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.red,
+                                      ),
+                                      child: const Align(
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                              end: 16),
+                                          child: Icon(Icons.delete_forever),
+                                        ),
+                                        alignment: Alignment.centerRight,
+                                      ),
                                     ),
-                                    onExpansionChanged: (isOpen) {
-                                      if (isOpen) {
-                                        context
-                                            .read<InterestingPlacesBloc>()
-                                            .add(TapOnInterestingPlace(state
-                                                .places![index]
-                                                .properties!
-                                                .xid!));
+                                    confirmDismiss: (direction) async {
+                                      if (direction ==
+                                          DismissDirection.startToEnd) {
+                                        return false;
+                                      } else {
+                                        return false;
                                       }
                                     },
-                                    childrenPadding: const EdgeInsets.all(20),
-                                    children: state.isLoadingPlaceInformation
-                                        ? [
-                                            const CircularProgressIndicator(
-                                              color: kWidgetColor,
-                                            ),
-                                          ]
-                                        : [
-                                            if (state.image != null)
-                                              ClipRRect(
-                                                child:
-                                                    Image.network(state.image!),
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                            if (state.image != null)
-                                              const SizedBox(height: 5),
-                                            Text(
-                                              state.text ?? 'Нет описания',
-                                              style:
-                                                  kTextStyleFootnote.copyWith(
-                                                      color: kWidgetColor),
-                                            ),
-                                          ],
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kMainColor,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: ExpansionTile(
+                                        iconColor: kWidgetColor,
+                                        title: Text(
+                                          state
+                                              .places![index].properties!.name!,
+                                          style: kTextStyleTitle,
+                                        ),
+                                        subtitle: Text(
+                                          'Рейтинг: ${state.places![index].properties!.rate!}',
+                                          style: kTextStyleTitle,
+                                        ),
+                                        onExpansionChanged: (isOpen) {
+                                          if (isOpen) {
+                                            context
+                                                .read<InterestingPlacesBloc>()
+                                                .add(TapOnInterestingPlace(state
+                                                    .places![index]
+                                                    .properties!
+                                                    .xid!));
+                                          }
+                                        },
+                                        childrenPadding:
+                                            const EdgeInsets.all(20),
+                                        children: state
+                                                .isLoadingPlaceInformation
+                                            ? [
+                                                const CircularProgressIndicator(
+                                                  color: kWidgetColor,
+                                                ),
+                                              ]
+                                            : [
+                                                if (state.image != null)
+                                                  ClipRRect(
+                                                    child: Image.network(
+                                                        state.image!),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                if (state.image != null)
+                                                  const SizedBox(height: 5),
+                                                Text(
+                                                  state.text ?? 'Нет описания',
+                                                  style: kTextStyleFootnote
+                                                      .copyWith(
+                                                          color: kWidgetColor),
+                                                ),
+                                              ],
+                                      ),
+                                    ),
                                   ),
                                 );
                               } else {

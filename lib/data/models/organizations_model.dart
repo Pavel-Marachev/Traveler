@@ -51,15 +51,11 @@ class OrganizationsModel {
   }
 }
 
-/// type : "Feature"
-/// geometry : {"type":"Point","coordinates":[37.76579,55.720014]}
-/// properties : {"name":"Vag Help","description":"2-й Вязовский пр., 4А, стр. 5, Москва, Россия","boundedBy":[[37.761635,55.71767],[37.769846,55.722304]],"CompanyMetaData":{"id":"132571738090","name":"Vag Help","address":"Россия, Москва, 2-й Вязовский проезд, 4А, стр. 5","url":"https://vaghelp.ru/","Phones":[{"type":"phone","formatted":"+7 (916) 097-25-00"}],"Categories":[{"class":"auto","name":"Автосервис, автотехцентр"}],"Hours":{"text":"ежедневно, 11:00–20:00","Availabilities":[{"Intervals":[{"from":"11:00:00","to":"20:00:00"}],"Everyday":true}]}}}
-
 class Features {
   Features({
     String? type,
     Geometry? geometry,
-    Properties0? properties,
+    Properties? properties,
   }) {
     _type = type;
     _geometry = geometry;
@@ -71,16 +67,16 @@ class Features {
     _geometry =
         json['geometry'] != null ? Geometry.fromJson(json['geometry']) : null;
     _properties = json['properties'] != null
-        ? Properties0.fromJson(json['properties'])
+        ? Properties.fromJson(json['properties'])
         : null;
   }
   String? _type;
   Geometry? _geometry;
-  Properties0? _properties;
+  Properties? _properties;
   Features copyWith({
     String? type,
     Geometry? geometry,
-    Properties0? properties,
+    Properties? properties,
   }) =>
       Features(
         type: type ?? _type,
@@ -89,7 +85,7 @@ class Features {
       );
   String? get type => _type;
   Geometry? get geometry => _geometry;
-  Properties0? get properties => _properties;
+  Properties? get properties => _properties;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -103,11 +99,6 @@ class Features {
     return map;
   }
 }
-
-/// name : "Vag Help"
-/// description : "2-й Вязовский пр., 4А, стр. 5, Москва, Россия"
-/// boundedBy : [[37.761635,55.71767],[37.769846,55.722304]]
-/// CompanyMetaData : {"id":"132571738090","name":"Vag Help","address":"Россия, Москва, 2-й Вязовский проезд, 4А, стр. 5","url":"https://vaghelp.ru/","Phones":[{"type":"phone","formatted":"+7 (916) 097-25-00"}],"Categories":[{"class":"auto","name":"Автосервис, автотехцентр"}],"Hours":{"text":"ежедневно, 11:00–20:00","Availabilities":[{"Intervals":[{"from":"11:00:00","to":"20:00:00"}],"Everyday":true}]}}
 
 class Properties {
   Properties({
@@ -163,14 +154,6 @@ class Properties {
     return map;
   }
 }
-
-/// id : "132571738090"
-/// name : "Vag Help"
-/// address : "Россия, Москва, 2-й Вязовский проезд, 4А, стр. 5"
-/// url : "https://vaghelp.ru/"
-/// Phones : [{"type":"phone","formatted":"+7 (916) 097-25-00"}]
-/// Categories : [{"class":"auto","name":"Автосервис, автотехцентр"}]
-/// Hours : {"text":"ежедневно, 11:00–20:00","Availabilities":[{"Intervals":[{"from":"11:00:00","to":"20:00:00"}],"Everyday":true}]}
 
 class CompanyMetaData {
   CompanyMetaData({
@@ -261,9 +244,6 @@ class CompanyMetaData {
     return map;
   }
 }
-
-/// text : "ежедневно, 11:00–20:00"
-/// Availabilities : [{"Intervals":[{"from":"11:00:00","to":"20:00:00"}],"Everyday":true}]
 
 class Hours {
   Hours({

@@ -19,8 +19,7 @@ class GeographicObjectsProvider {
     }
   }
 
-  Future<OrganizationsModel> fetchOrganizationsList(
-      String? _requestMessage) async {
+  Future<OrganizationsModel> fetchOrganization(String? _requestMessage) async {
     final response = await _client.get(Uri.parse(
         'https://search-maps.yandex.ru/v1/?text=$_requestMessage&type=biz&lang=ru_RU&results=1&apikey=$_apiKey'));
     if (response.statusCode == 200) {

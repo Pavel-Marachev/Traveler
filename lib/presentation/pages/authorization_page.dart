@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:traveler/business_logic/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:traveler/presentation/widgets/authorization_button.dart';
 import 'package:traveler/presentation/widgets/authorization_text_field.dart';
 
 class AuthorizationPage extends StatefulWidget {
@@ -87,51 +88,38 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                           obscureText: true,
                                         ),
                                       const SizedBox(height: 20),
-                                      GestureDetector(
-                                        onTap: () {
-                                          FocusScope.of(context).unfocus();
-                                          if (emailController.text.isEmpty &&
-                                              passwordController.text.isEmpty && !state.isLoading) {
+                                      AuthorizationButton(
+                                          onTap: () {
+                                            FocusScope.of(context).unfocus();
+                                            if (emailController.text.isEmpty &&
+                                                passwordController
+                                                    .text.isEmpty &&
+                                                !state.isLoading) {
+                                              context
+                                                  .read<AuthorizationBloc>()
+                                                  .add(InputErrorChanged(
+                                                      'Text fields are empty!'));
+                                            }
                                             context
                                                 .read<AuthorizationBloc>()
-                                                .add(InputErrorChanged(
-                                                    'Text fields are empty!'));
-                                          }
-                                          context.read<AuthorizationBloc>().add(
-                                                AuthorizationConfirmed(
-                                                  context: context,
-                                                  isRegistration:
-                                                      state.isRegistration,
-                                                  emailController:
-                                                      emailController,
-                                                  passwordController:
-                                                      passwordController,
-                                                  passwordConfirmationController:
-                                                      passwordConfirmationController,
-                                                ),
-                                              );
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color:
-                                                kWidgetColor.withOpacity(0.7),
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          child: Center(
-                                            child: state.isLoading ? const CircularProgressIndicator(color: kWidgetColor, strokeWidth: 3,) : Text(
-                                              state.isRegistration
-                                                  ? 'Sign up'
-                                                  : 'Sign in',
-                                              style: kTextStyleTitle.copyWith(
-                                                  color:
-                                                      kBackgroundWidgetColor),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                                .add(
+                                                  AuthorizationConfirmed(
+                                                    context: context,
+                                                    isRegistration:
+                                                        state.isRegistration,
+                                                    emailController:
+                                                        emailController,
+                                                    passwordController:
+                                                        passwordController,
+                                                    passwordConfirmationController:
+                                                        passwordConfirmationController,
+                                                  ),
+                                                );
+                                          },
+                                          isLoading: state.isLoading,
+                                          title: state.isRegistration
+                                              ? 'Sign up'
+                                              : 'Sign in'),
                                       const SizedBox(height: 10),
                                       RichText(
                                         text: TextSpan(
