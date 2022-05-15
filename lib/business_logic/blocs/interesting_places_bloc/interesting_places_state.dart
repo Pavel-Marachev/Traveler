@@ -2,6 +2,7 @@ part of 'package:traveler/business_logic/blocs/interesting_places_bloc/interesti
 
 class InterestingPlacesState {
   List<Features>? places;
+  List<Features>? favoritePlaces;
   bool isLoadingAllPlaces;
   bool isLoadingPlaceInformation;
   String? image;
@@ -9,6 +10,7 @@ class InterestingPlacesState {
 
   InterestingPlacesState({
     this.places,
+    this.favoritePlaces,
     this.isLoadingAllPlaces = true,
     this.isLoadingPlaceInformation = true,
     this.image,
@@ -17,6 +19,7 @@ class InterestingPlacesState {
 
   InterestingPlacesState copyWith({
     List<Features>? places,
+    List<Features>? favoritePlaces,
     bool? isLoadingAllPlaces,
     bool? isLoadingPlaceInformation,
     String? image,
@@ -24,6 +27,7 @@ class InterestingPlacesState {
   }) {
     return InterestingPlacesState(
       places: places ?? this.places,
+      favoritePlaces: favoritePlaces ?? this.favoritePlaces,
       isLoadingAllPlaces: isLoadingAllPlaces ?? this.isLoadingAllPlaces,
       isLoadingPlaceInformation:
           isLoadingPlaceInformation ?? this.isLoadingPlaceInformation,

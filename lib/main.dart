@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<NavigationBloc, NavigationState>(
         builder: (context, state) {
       return MaterialApp(
+        theme: ThemeData(fontFamily: kMainTheme),
         title: 'Traveler',
         debugShowCheckedModeBanner: false,
         home: Scaffold(

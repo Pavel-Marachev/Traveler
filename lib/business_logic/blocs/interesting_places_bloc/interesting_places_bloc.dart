@@ -5,6 +5,7 @@ import 'package:traveler/data/models/place_information_model.dart';
 import 'package:traveler/data/repositories/repository.dart';
 
 part 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_event.dart';
+
 part 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_state.dart';
 
 class InterestingPlacesBloc
@@ -12,11 +13,14 @@ class InterestingPlacesBloc
   InterestingPlacesBloc() : super(InterestingPlacesState()) {
     on<Initialization>(fetchPlacesList);
     on<TapOnInterestingPlace>(fetchPlaceInformation);
+    on<AddedToFavorite>(addToFavoritePlaces);
+    on<DeletedFromFavorite>(deleteFromFavoritePlaces);
   }
 
   final _repository = Repository();
   double? _latitude;
   double? _longitude;
+  List<Features> favoritePlaces = [];
 
   Future<void> fetchPlacesList(
       Initialization event, Emitter<InterestingPlacesState> emit) async {
@@ -48,5 +52,20 @@ class InterestingPlacesBloc
       image: itemModel.preview?.source,
       text: itemModel.wikipediaExtracts?.text,
     ));
+  }
+
+  void addToFavoritePlaces(
+      AddedToFavorite event, Emitter<InterestingPlacesState> emit) {
+    if (!favoritePlaces.contains(state.places![event.index])) {
+      favoritePlaces.add(state.places![event.index]);
+    }
+    emit(state.copyWith(favoritePlaces: favoritePlaces));
+  }
+
+  void deleteFromFavoritePlaces(
+      DeletedFromFavorite event, Emitter<InterestingPlacesState> emit) {
+    favoritePlaces.removeWhere((element) =>
+        element.properties!.xid == state.places![event.index].properties!.xid);
+    emit(state.copyWith(favoritePlaces: favoritePlaces));
   }
 }

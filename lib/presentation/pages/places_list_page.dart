@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_bloc.dart';
+import 'package:traveler/data/models/interesting_places_model.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveler/presentation/widgets/authorization_text_field.dart';
@@ -29,11 +30,17 @@ class _PlacesListPageState extends State<PlacesListPage> {
             ],
           ),
         ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: BlocBuilder<InterestingPlacesBloc, InterestingPlacesState>(
-            builder: (BuildContext context, InterestingPlacesState state) {
-              return CustomScrollView(
+        child: BlocBuilder<InterestingPlacesBloc, InterestingPlacesState>(
+          builder: (BuildContext context, InterestingPlacesState state) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              floatingActionButton: FloatingActionButton.extended(
+                icon: const Icon(Icons.favorite),
+                label: Text('${state.favoritePlaces?.length ?? 0}'),
+                backgroundColor: kBackgroundWidgetColor.withOpacity(0.6),
+                onPressed: () {},
+              ),
+              body: CustomScrollView(
                 slivers: [
                   SliverAppBar(
                     title: const Text(
@@ -93,7 +100,7 @@ class _PlacesListPageState extends State<PlacesListPage> {
                                     background: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
-                                        color: Colors.green,
+                                        color: kAddColor,
                                       ),
                                       child: const Align(
                                         child: Padding(
@@ -107,7 +114,7 @@ class _PlacesListPageState extends State<PlacesListPage> {
                                     secondaryBackground: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(15),
-                                        color: Colors.red,
+                                        color: kDeleteColor,
                                       ),
                                       child: const Align(
                                         child: Padding(
@@ -121,8 +128,14 @@ class _PlacesListPageState extends State<PlacesListPage> {
                                     confirmDismiss: (direction) async {
                                       if (direction ==
                                           DismissDirection.startToEnd) {
+                                        context
+                                            .read<InterestingPlacesBloc>()
+                                            .add(AddedToFavorite(index));
                                         return false;
                                       } else {
+                                        context
+                                            .read<InterestingPlacesBloc>()
+                                            .add(DeletedFromFavorite(index));
                                         return false;
                                       }
                                     },
@@ -191,9 +204,9 @@ class _PlacesListPageState extends State<PlacesListPage> {
                           ),
                         ),
                 ],
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

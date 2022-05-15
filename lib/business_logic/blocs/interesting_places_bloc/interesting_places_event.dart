@@ -13,3 +13,15 @@ class TapOnInterestingPlace extends InterestingPlacesEvent {
 
   TapOnInterestingPlace(this.xid) : super();
 }
+
+class AddedToFavorite extends InterestingPlacesEvent {
+  int index;
+
+  AddedToFavorite(this.index) : super();
+}
+
+class DeletedFromFavorite extends InterestingPlacesEvent {
+  int index;
+
+  DeletedFromFavorite(this.index) : super();
+}
