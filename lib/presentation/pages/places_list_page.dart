@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_bloc.dart';
-import 'package:traveler/data/models/interesting_places_model.dart';
+import 'package:traveler/data/models/place_information_model.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveler/presentation/widgets/authorization_text_field.dart';
@@ -159,10 +159,8 @@ class _PlacesListPageState extends State<PlacesListPage> {
                                           if (isOpen) {
                                             context
                                                 .read<InterestingPlacesBloc>()
-                                                .add(TapOnInterestingPlace(state
-                                                    .places![index]
-                                                    .properties!
-                                                    .xid!));
+                                                .add(TapOnInterestingPlace(
+                                                    index));
                                           }
                                         },
                                         childrenPadding:
@@ -175,18 +173,73 @@ class _PlacesListPageState extends State<PlacesListPage> {
                                                 ),
                                               ]
                                             : [
-                                                if (state.image != null)
+                                                if (state.foundPlaces != null &&
+                                                    state.foundPlaces!
+                                                            .firstWhere(
+                                                                (element) =>
+                                                                    element
+                                                                        .xid ==
+                                                                    state
+                                                                        .places?[
+                                                                            index]
+                                                                        .properties
+                                                                        ?.xid,
+                                                                orElse: () =>
+                                                                    PlaceInformationModel())
+                                                            .preview
+                                                            ?.source !=
+                                                        null)
                                                   ClipRRect(
-                                                    child: Image.network(
-                                                        state.image!),
+                                                    child: Image.network(state
+                                                        .foundPlaces!
+                                                        .firstWhere(
+                                                            (element) =>
+                                                                element.xid ==
+                                                                state
+                                                                    .places?[
+                                                                        index]
+                                                                    .properties
+                                                                    ?.xid,
+                                                            orElse: () =>
+                                                                PlaceInformationModel())
+                                                        .preview!
+                                                        .source!),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15),
                                                   ),
-                                                if (state.image != null)
+                                                if (state.foundPlaces != null &&
+                                                    state.foundPlaces!
+                                                            .firstWhere(
+                                                                (element) =>
+                                                                    element
+                                                                        .xid ==
+                                                                    state
+                                                                        .places?[
+                                                                            index]
+                                                                        .properties
+                                                                        ?.xid,
+                                                                orElse: () =>
+                                                                    PlaceInformationModel())
+                                                            .preview
+                                                            ?.source !=
+                                                        null)
                                                   const SizedBox(height: 5),
                                                 Text(
-                                                  state.text ?? 'Нет описания',
+                                                  state.foundPlaces!
+                                                          .firstWhere(
+                                                              (element) =>
+                                                                  element.xid ==
+                                                                  state
+                                                                      .places?[
+                                                                          index]
+                                                                      .properties
+                                                                      ?.xid,
+                                                              orElse: () =>
+                                                                  PlaceInformationModel())
+                                                          .wikipediaExtracts
+                                                          ?.text ??
+                                                      'Нет описания',
                                                   style: kTextStyleFootnote
                                                       .copyWith(
                                                           color: kWidgetColor),

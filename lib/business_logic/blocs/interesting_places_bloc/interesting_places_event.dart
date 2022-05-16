@@ -9,9 +9,9 @@ class Initialization extends InterestingPlacesEvent {
 }
 
 class TapOnInterestingPlace extends InterestingPlacesEvent {
-  String xid;
+  int index;
 
-  TapOnInterestingPlace(this.xid) : super();
+  TapOnInterestingPlace(this.index) : super();
 }
 
 class AddedToFavorite extends InterestingPlacesEvent {

@@ -21,6 +21,7 @@ class InterestingPlacesBloc
   double? _latitude;
   double? _longitude;
   List<Features> favoritePlaces = [];
+  List<PlaceInformationModel> foundPlaces = [];
 
   Future<void> fetchPlacesList(
       Initialization event, Emitter<InterestingPlacesState> emit) async {
@@ -45,12 +46,22 @@ class InterestingPlacesBloc
   Future<void> fetchPlaceInformation(
       TapOnInterestingPlace event, Emitter<InterestingPlacesState> emit) async {
     emit(state.copyWith(isLoadingPlaceInformation: true));
-    PlaceInformationModel itemModel =
-        await _repository.fetchPlaceInformation(event.xid);
+    PlaceInformationModel? itemModel;
+    if (state.foundPlaces != null) {
+      itemModel = state.foundPlaces!.firstWhere(
+          (element) =>
+              element.xid == state.places?[event.index].properties?.xid,
+          orElse: () => PlaceInformationModel());
+    }
+    if (itemModel?.xid == null) {
+      itemModel = await _repository
+          .fetchPlaceInformation(state.places![event.index].properties!.xid!);
+      foundPlaces.add(itemModel);
+    }
+
     emit(state.copyWith(
       isLoadingPlaceInformation: false,
-      image: itemModel.preview?.source,
-      text: itemModel.wikipediaExtracts?.text,
+      foundPlaces: foundPlaces,
     ));
   }
 

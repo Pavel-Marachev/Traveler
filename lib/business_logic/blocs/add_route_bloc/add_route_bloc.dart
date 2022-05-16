@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveler/data/models/geographic_objects_model.dart';
-import 'package:traveler/data/models/organizations_model.dart';
 import 'package:traveler/data/repositories/repository.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
@@ -34,10 +33,11 @@ class AddRouteBloc extends Bloc<AddRouteEvent, AddRouteState> {
     }
   }
 
+  ///deleted method
   Future<void> fetchOrganization(
       InputPlaceSubmitted event, Emitter<AddRouteState> emit) async {
-    OrganizationsModel itemModel =
-        await _repository.fetchOrganization(event.value);
+    GeographicObjectsModel itemModel =
+        await _repository.fetchObjectsList(event.value);
     if (itemModel.features!.isNotEmpty) {
       _latitude = itemModel.features?[0].geometry?.coordinates?[1];
       _longitude = itemModel.features?[0].geometry?.coordinates?[0];
