@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_bloc.dart';
 import 'package:traveler/data/models/place_information_model.dart';
+import 'package:traveler/presentation/pages/favorite_places_page.dart';
 import 'package:traveler/presentation/theme/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:traveler/presentation/widgets/authorization_text_field.dart';
+import 'package:traveler/presentation/widgets/dismissible_widget.dart';
 
 class PlacesListPage extends StatefulWidget {
   const PlacesListPage({Key? key}) : super(key: key);
@@ -38,7 +40,16 @@ class _PlacesListPageState extends State<PlacesListPage> {
                 icon: const Icon(Icons.favorite),
                 label: Text('${state.favoritePlaces?.length ?? 0}'),
                 backgroundColor: kBackgroundWidgetColor.withOpacity(0.6),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<InterestingPlacesBloc>(
+                                    context),
+                                child: const FavoritePlacesPage(),
+                              )));
+                },
               ),
               body: CustomScrollView(
                 slivers: [
@@ -87,167 +98,56 @@ class _PlacesListPageState extends State<PlacesListPage> {
                             (context, index) {
                               if (state.places![index].properties!.name!
                                   .isNotEmpty) {
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: kMainColor,
-                                    boxShadow: kMainShadow,
-                                  ),
-                                  child: Dismissible(
-                                    key: Key('$index'),
-                                    background: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: kAddColor,
-                                      ),
-                                      child: const Align(
-                                        child: Padding(
-                                          padding: EdgeInsetsDirectional.only(
-                                              start: 16),
-                                          child: Icon(Icons.favorite),
-                                        ),
-                                        alignment: Alignment.centerLeft,
-                                      ),
-                                    ),
-                                    secondaryBackground: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: kDeleteColor,
-                                      ),
-                                      child: const Align(
-                                        child: Padding(
-                                          padding: EdgeInsetsDirectional.only(
-                                              end: 16),
-                                          child: Icon(Icons.delete_forever),
-                                        ),
-                                        alignment: Alignment.centerRight,
-                                      ),
-                                    ),
-                                    confirmDismiss: (direction) async {
-                                      if (direction ==
-                                          DismissDirection.startToEnd) {
-                                        context
-                                            .read<InterestingPlacesBloc>()
-                                            .add(AddedToFavorite(index));
-                                        return false;
-                                      } else {
-                                        context
-                                            .read<InterestingPlacesBloc>()
-                                            .add(DeletedFromFavorite(index));
-                                        return false;
-                                      }
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: kMainColor,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: ExpansionTile(
-                                        iconColor: kWidgetColor,
-                                        title: Text(
-                                          state
-                                              .places![index].properties!.name!,
-                                          style: kTextStyleTitle,
-                                        ),
-                                        subtitle: Text(
-                                          'Рейтинг: ${state.places![index].properties!.rate!}',
-                                          style: kTextStyleTitle,
-                                        ),
-                                        onExpansionChanged: (isOpen) {
-                                          if (isOpen) {
-                                            context
-                                                .read<InterestingPlacesBloc>()
-                                                .add(TapOnInterestingPlace(
-                                                    index));
-                                          }
-                                        },
-                                        childrenPadding:
-                                            const EdgeInsets.all(20),
-                                        children: state
-                                                .isLoadingPlaceInformation
-                                            ? [
-                                                const CircularProgressIndicator(
-                                                  color: kWidgetColor,
-                                                ),
-                                              ]
-                                            : [
-                                                if (state.foundPlaces != null &&
-                                                    state.foundPlaces!
-                                                            .firstWhere(
-                                                                (element) =>
-                                                                    element
-                                                                        .xid ==
-                                                                    state
-                                                                        .places?[
-                                                                            index]
-                                                                        .properties
-                                                                        ?.xid,
-                                                                orElse: () =>
-                                                                    PlaceInformationModel())
-                                                            .preview
-                                                            ?.source !=
-                                                        null)
-                                                  ClipRRect(
-                                                    child: Image.network(state
-                                                        .foundPlaces!
-                                                        .firstWhere(
-                                                            (element) =>
-                                                                element.xid ==
-                                                                state
-                                                                    .places?[
-                                                                        index]
-                                                                    .properties
-                                                                    ?.xid,
-                                                            orElse: () =>
-                                                                PlaceInformationModel())
-                                                        .preview!
-                                                        .source!),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                if (state.foundPlaces != null &&
-                                                    state.foundPlaces!
-                                                            .firstWhere(
-                                                                (element) =>
-                                                                    element
-                                                                        .xid ==
-                                                                    state
-                                                                        .places?[
-                                                                            index]
-                                                                        .properties
-                                                                        ?.xid,
-                                                                orElse: () =>
-                                                                    PlaceInformationModel())
-                                                            .preview
-                                                            ?.source !=
-                                                        null)
-                                                  const SizedBox(height: 5),
-                                                Text(
-                                                  state.foundPlaces!
-                                                          .firstWhere(
-                                                              (element) =>
-                                                                  element.xid ==
-                                                                  state
-                                                                      .places?[
-                                                                          index]
-                                                                      .properties
-                                                                      ?.xid,
-                                                              orElse: () =>
-                                                                  PlaceInformationModel())
-                                                          .wikipediaExtracts
-                                                          ?.text ??
-                                                      'Нет описания',
-                                                  style: kTextStyleFootnote
-                                                      .copyWith(
-                                                          color: kWidgetColor),
-                                                ),
-                                              ],
-                                      ),
-                                    ),
-                                  ),
+                                return DismissibleWidget(
+                                  dismissKey: '$index',
+                                  confirmDismiss: (DismissDirection direction) {
+                                    if (direction ==
+                                        DismissDirection.startToEnd) {
+                                      context
+                                          .read<InterestingPlacesBloc>()
+                                          .add(AddedToFavorite(index));
+                                      return false;
+                                    } else {
+                                      context.read<InterestingPlacesBloc>().add(
+                                          DeletedFromFavorite(state
+                                              .favoritePlaces![index]
+                                              .properties!
+                                              .xid!));
+                                      return false;
+                                    }
+                                  },
+                                  placeName:
+                                      state.places![index].properties!.name!,
+                                  image: state.foundPlaces
+                                      ?.firstWhere(
+                                          (element) =>
+                                              element.xid ==
+                                              state.places?[index].properties
+                                                  ?.xid,
+                                          orElse: () => PlaceInformationModel())
+                                      .preview
+                                      ?.source,
+                                  rate: state.places![index].properties!.rate!,
+                                  description: state.foundPlaces
+                                      ?.firstWhere(
+                                          (element) =>
+                                              element.xid ==
+                                              state.places?[index].properties
+                                                  ?.xid,
+                                          orElse: () => PlaceInformationModel())
+                                      .wikipediaExtracts
+                                      ?.text,
+                                  isLoadingPlaceInformation:
+                                      state.isLoadingPlaceInformation,
+                                  onExpansionChanged: (bool isOpen) {
+                                    if (isOpen) {
+                                      context.read<InterestingPlacesBloc>().add(
+                                          TapOnInterestingPlace(state
+                                              .places![index]
+                                              .properties!
+                                              .xid!));
+                                    }
+                                  },
                                 );
                               } else {
                                 return Container();

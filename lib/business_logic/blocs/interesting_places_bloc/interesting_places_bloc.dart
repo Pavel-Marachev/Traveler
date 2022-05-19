@@ -49,13 +49,11 @@ class InterestingPlacesBloc
     PlaceInformationModel? itemModel;
     if (state.foundPlaces != null) {
       itemModel = state.foundPlaces!.firstWhere(
-          (element) =>
-              element.xid == state.places?[event.index].properties?.xid,
+          (element) => element.xid == event.xid,
           orElse: () => PlaceInformationModel());
     }
     if (itemModel?.xid == null) {
-      itemModel = await _repository
-          .fetchPlaceInformation(state.places![event.index].properties!.xid!);
+      itemModel = await _repository.fetchPlaceInformation(event.xid);
       foundPlaces.add(itemModel);
     }
 
@@ -75,8 +73,8 @@ class InterestingPlacesBloc
 
   void deleteFromFavoritePlaces(
       DeletedFromFavorite event, Emitter<InterestingPlacesState> emit) {
-    favoritePlaces.removeWhere((element) =>
-        element.properties!.xid == state.places![event.index].properties!.xid);
+    favoritePlaces
+        .removeWhere((element) => element.properties!.xid == event.xid);
     emit(state.copyWith(favoritePlaces: favoritePlaces));
   }
 }
