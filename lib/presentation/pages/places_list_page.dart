@@ -41,14 +41,8 @@ class _PlacesListPageState extends State<PlacesListPage> {
                 label: Text('${state.favoritePlaces?.length ?? 0}'),
                 backgroundColor: kBackgroundWidgetColor.withOpacity(0.6),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                                value: BlocProvider.of<InterestingPlacesBloc>(
-                                    context),
-                                child: const FavoritePlacesPage(),
-                              )));
+                  Navigator.pushNamed(context, '/favorite_places_page',
+                      arguments: context);
                 },
               ),
               body: CustomScrollView(

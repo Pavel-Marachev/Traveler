@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:traveler/business_logic/blocs/interesting_places_bloc/interesting_places_bloc.dart';
 import 'package:traveler/business_logic/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:traveler/firebase_options.dart';
 import 'package:traveler/presentation/pages/add_route_page.dart';
 import 'package:traveler/presentation/pages/authorization_page.dart';
+import 'package:traveler/presentation/pages/favorite_places_page.dart';
 
 import 'package:traveler/presentation/pages/home_page.dart';
 import 'package:traveler/presentation/pages/places_list_page.dart';
@@ -54,6 +56,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: kMainTheme),
         title: 'Traveler',
         debugShowCheckedModeBanner: false,
+        onGenerateRoute: (settings) {
+          if (settings.name == '/favorite_places_page') {
+            return MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: BlocProvider.of<InterestingPlacesBloc>(
+                    settings.arguments as BuildContext),
+                child: const FavoritePlacesPage(),
+              ),
+            );
+          }
+          return null;
+        },
         home: Scaffold(
           backgroundColor: kBackgroundWidgetColor,
           bottomNavigationBar: BottomNavigationBar(
