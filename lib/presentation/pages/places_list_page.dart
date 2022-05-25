@@ -104,7 +104,7 @@ class _PlacesListPageState extends State<PlacesListPage> {
                                     } else {
                                       context.read<InterestingPlacesBloc>().add(
                                           DeletedFromFavorite(state
-                                              .favoritePlaces![index]
+                                              .places![index]
                                               .properties!
                                               .xid!));
                                       return false;
