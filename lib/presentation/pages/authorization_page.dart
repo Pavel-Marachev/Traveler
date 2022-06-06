@@ -68,6 +68,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                       ),
                                       const SizedBox(height: 50),
                                       AuthorizationTextField(
+                                        key: Key('emailKey'),
                                         hintText: 'Email',
                                         controller: emailController,
                                         obscureText: false,
@@ -99,22 +100,29 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                                                   .read<AuthorizationBloc>()
                                                   .add(InputErrorChanged(
                                                       'Text fields are empty!'));
+                                            } else if (!formKey.currentState!
+                                                .validate()) {
+                                              context
+                                                  .read<AuthorizationBloc>()
+                                                  .add(InputErrorChanged(
+                                                      'Incorrect data'));
+                                            } else {
+                                              context
+                                                  .read<AuthorizationBloc>()
+                                                  .add(
+                                                    AuthorizationConfirmed(
+                                                      context: context,
+                                                      isRegistration:
+                                                          state.isRegistration,
+                                                      emailController:
+                                                          emailController,
+                                                      passwordController:
+                                                          passwordController,
+                                                      passwordConfirmationController:
+                                                          passwordConfirmationController,
+                                                    ),
+                                                  );
                                             }
-                                            context
-                                                .read<AuthorizationBloc>()
-                                                .add(
-                                                  AuthorizationConfirmed(
-                                                    context: context,
-                                                    isRegistration:
-                                                        state.isRegistration,
-                                                    emailController:
-                                                        emailController,
-                                                    passwordController:
-                                                        passwordController,
-                                                    passwordConfirmationController:
-                                                        passwordConfirmationController,
-                                                  ),
-                                                );
                                           },
                                           isLoading: state.isLoading,
                                           title: state.isRegistration

@@ -36,15 +36,18 @@ class HomePage extends StatelessWidget {
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
               centerTitle: true,
-              leading: GestureDetector(
-                onTap: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                        builder: (context) => const AuthorizationPage())),
-                child: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: SvgPicture.asset(
-                    "assets/images/logout_icon.svg",
-                    color: kWidgetColor,
+              leading: Tooltip(
+                message: 'Log out',
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => const AuthorizationPage())),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: SvgPicture.asset(
+                      "assets/images/logout_icon.svg",
+                      color: kWidgetColor,
+                    ),
                   ),
                 ),
               ),

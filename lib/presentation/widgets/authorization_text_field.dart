@@ -17,6 +17,23 @@ class AuthorizationTextField extends StatelessWidget {
     this.borderRadius = 30,
   }) : super(key: key);
 
+  String? validateEmail(String? value) {
+    if (hintText == 'Email') {
+      value != null && value.isNotEmpty ? null : 'Required';
+      String pattern =
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+          r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+          r"{0,253}[a-zA-Z0-9])?)*$";
+      RegExp regex = RegExp(pattern);
+      if (value == null || value.isEmpty || !regex.hasMatch(value))
+        return 'Enter a valid email address';
+      else
+        return null;
+    } else {
+      return value != null && value.isNotEmpty ? null : 'Required';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -50,8 +67,7 @@ class AuthorizationTextField extends StatelessWidget {
         ),
         border: const OutlineInputBorder(),
       ),
-      validator: (value) =>
-          value != null && value.isNotEmpty ? null : 'Required',
+      validator: (value) => validateEmail(value),
       onFieldSubmitted: (value) => onSubmitted!(value),
     );
   }

@@ -1,30 +1,62 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:traveler/business_logic/blocs/navigation_bloc/navigation_bloc.dart';
 import 'package:traveler/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('authorization enter test', () {
+    testWidgets('Email enter test', (tester) async {
+      await tester.pumpWidget(MyApp());
+      await tester.tap(find.byTooltip('Log out'));
+      await tester.pump();
+      expect(find.text('Login'), findsOneWidget);
+      // var txtForm = await find.byKey(Key('emailKey'));
+      // print(txtForm);
+      //await tester.enterText(txtForm, 'df@s');
+    });
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  group('NavigationBloc', () {
+    late NavigationBloc navigationBloc;
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    setUp(() {
+      navigationBloc = NavigationBloc();
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('initial state is StateHomePage', () {
+      expect(navigationBloc.state, StateHomePage());
+    });
+
+    testWidgets('tab bar buttons tap-test', (tester) async {
+      await tester.pumpWidget(const MyApp());
+      tester.tap(find.textContaining("Места"));
+      tester.tap(find.textContaining("Главная"));
+      tester.tap(find.textContaining("Планирование"));
+    });
+
+    blocTest(
+      "tap on tab 'places'",
+      build: () => navigationBloc,
+      act: (NavigationBloc bloc) => bloc.add(PressedOnPlacesListPage()),
+      expect: () => [StatePlacesListPage()],
+    );
+
+    blocTest(
+      "tap on tab 'main page'",
+      build: () => navigationBloc,
+      act: (NavigationBloc bloc) => bloc.add(PressedOnHomePage()),
+      expect: () => [StateHomePage()],
+    );
+
+    blocTest(
+      "tap on tab 'planning'",
+      build: () => navigationBloc,
+      act: (NavigationBloc bloc) => bloc.add(PressedOnAddRoutePage()),
+      expect: () => [StateAddRoutePage()],
+    );
+
+    tearDown(() {
+      navigationBloc.close();
+    });
   });
 }

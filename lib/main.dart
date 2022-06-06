@@ -17,12 +17,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(BlocProvider(
-      create: (context) => NavigationBloc()..add(AppStarted()),
-      child: const MaterialApp(
-        home: MyApp(),
-        debugShowCheckedModeBanner: false,
-      )));
+  runApp(const MaterialApp(
+    home: MyApp(),
+    debugShowCheckedModeBanner: false,
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -50,86 +48,91 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationBloc, NavigationState>(
-        builder: (context, state) {
-      return MaterialApp(
-        theme: ThemeData(fontFamily: kMainTheme),
-        title: 'Traveler',
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: (settings) {
-          if (settings.name == '/favorite_places_page') {
-            return MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<InterestingPlacesBloc>(
-                    settings.arguments as BuildContext),
-                child: const FavoritePlacesPage(),
-              ),
-            );
-          }
-          return null;
-        },
-        home: Scaffold(
-          backgroundColor: kBackgroundWidgetColor,
-          bottomNavigationBar: BottomNavigationBar(
-            unselectedItemColor: kWidgetColor.withOpacity(0.6),
-            selectedItemColor: kWidgetColor,
-            backgroundColor: kMainColor.withOpacity(0.3),
-            currentIndex: getCurrentIndex(state),
-            onTap: (value) {
-              switch (value) {
-                case 0:
-                  context.read<NavigationBloc>().add(PressedOnPlacesListPage());
-                  break;
-                case 1:
-                  context.read<NavigationBloc>().add(PressedOnHomePage());
-                  break;
-                case 2:
-                  context.read<NavigationBloc>().add(PressedOnAddRoutePage());
-                  break;
-              }
-            },
-            items: [
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/list_icon.svg",
-                  color: kWidgetColor
-                      .withOpacity(getCurrentIndex(state) == 0 ? 1 : 0.6),
+    return BlocProvider(
+      create: (context) => NavigationBloc()..add(AppStarted()),
+      child: BlocBuilder<NavigationBloc, NavigationState>(
+          builder: (context, state) {
+        return MaterialApp(
+          theme: ThemeData(fontFamily: kMainTheme),
+          title: 'Traveler',
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: (settings) {
+            if (settings.name == '/favorite_places_page') {
+              return MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<InterestingPlacesBloc>(
+                      settings.arguments as BuildContext),
+                  child: const FavoritePlacesPage(),
                 ),
-                label: "Места",
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/home_icon.svg",
-                  color: kWidgetColor
-                      .withOpacity(getCurrentIndex(state) == 1 ? 1 : 0.6),
+              );
+            }
+            return null;
+          },
+          home: Scaffold(
+            backgroundColor: kBackgroundWidgetColor,
+            bottomNavigationBar: BottomNavigationBar(
+              unselectedItemColor: kWidgetColor.withOpacity(0.6),
+              selectedItemColor: kWidgetColor,
+              backgroundColor: kMainColor.withOpacity(0.3),
+              currentIndex: getCurrentIndex(state),
+              onTap: (value) {
+                switch (value) {
+                  case 0:
+                    context
+                        .read<NavigationBloc>()
+                        .add(PressedOnPlacesListPage());
+                    break;
+                  case 1:
+                    context.read<NavigationBloc>().add(PressedOnHomePage());
+                    break;
+                  case 2:
+                    context.read<NavigationBloc>().add(PressedOnAddRoutePage());
+                    break;
+                }
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/images/list_icon.svg",
+                    color: kWidgetColor
+                        .withOpacity(getCurrentIndex(state) == 0 ? 1 : 0.6),
+                  ),
+                  label: "Места",
                 ),
-                label: "Главная",
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/images/travel_add_icon.svg",
-                  color: kWidgetColor
-                      .withOpacity(getCurrentIndex(state) == 2 ? 1 : 0.6),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/images/home_icon.svg",
+                    color: kWidgetColor
+                        .withOpacity(getCurrentIndex(state) == 1 ? 1 : 0.6),
+                  ),
+                  label: "Главная",
                 ),
-                label: "Планирование",
-              ),
-            ],
-          ),
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment(0, 1),
-                end: Alignment(1, 0.2),
-                colors: <Color>[
-                  kMainColor,
-                  kBackgroundWidgetColor.withOpacity(0.9),
-                ],
-              ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/images/travel_add_icon.svg",
+                    color: kWidgetColor
+                        .withOpacity(getCurrentIndex(state) == 2 ? 1 : 0.6),
+                  ),
+                  label: "Планирование",
+                ),
+              ],
             ),
-            child: getPageState(state),
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment(0, 1),
+                  end: Alignment(1, 0.2),
+                  colors: <Color>[
+                    kMainColor,
+                    kBackgroundWidgetColor.withOpacity(0.9),
+                  ],
+                ),
+              ),
+              child: getPageState(state),
+            ),
           ),
-        ),
-      );
-    });
+        );
+      }),
+    );
   }
 }
